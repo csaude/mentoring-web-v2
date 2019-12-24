@@ -1,0 +1,29 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+
+    <mat-card >
+    
+    <mat-card-header>
+      <mat-card-title><h1 class="mat-h1">Tutoria - Login</h1></mat-card-title>
+     </mat-card-header>
+    
+    <form [formGroup]="form" (ngSubmit)="login()">
+    <mat-card-content fxLayout="column">
+     <mat-form-field>
+      <input matInput type="text" [(ngModel)]="localUser.username" id="username" formControlName="username" placeholder="Username *">
+    </mat-form-field>
+     <mat-form-field>
+     <input type="password" matInput placeholder="Password *" [(ngModel)]="localUser.password" id="password" formControlName="password">
+     </mat-form-field>
+
+       <span align="end">
+    <br>
+
+    <a href="#" onClick="return false;" (click)="resetPass()">Reset Password!</a>&nbsp;&nbsp;&nbsp;
+        <mat-progress-bar mode="indeterminate" *ngIf="isDisabled"></mat-progress-bar>
+        <button type="submit" mat-raised-button color="primary" [disabled]="isDisabled">Login</button>
+       </span>
+
+    </mat-card-content>
+  </form>
+    </mat-card>
+    </div>

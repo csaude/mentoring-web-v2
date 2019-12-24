@@ -1,0 +1,12 @@
+
+ 
+ .mat-toolbar-row, .mat-toolbar-single-row {
+    height: 35px;
+}
+
+.mat-toolbar-multiple-rows {
+  min-height: 35px;
+}
+
+
+

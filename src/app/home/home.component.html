@@ -1,0 +1,99 @@
+<div style="margin: 0 auto;width: 95%;margin-top: 100px; padding-left: 5%;">
+    <h1 class="mat-h1">{{ "dashboard" | translate }} <a target="_blank" matTooltip="Ajuda" href="https://docs.google.com/document/d/1mivYpOE511T_dxPrZzGvvOLt1R_feiErxX848T29B5w/edit#"><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></h1>
+
+    <div style="display: flex;">
+            <mat-card style="width: 92%;">
+                {{ "mentoring_sessions" | translate }}
+            </mat-card>
+
+    </div>
+
+    <div style="margin-top: 10px;display: flex;">
+        <mat-card style="width: 92%;">
+            <mat-card-content>
+                <mat-card-subtitle></mat-card-subtitle>
+               
+            <div style="height:450px;">
+                <mat-spinner *ngIf="!chart1" style="margin: 0 auto;"></mat-spinner>
+              <canvas *ngIf="chart1" baseChart [datasets]="barChartData" [labels]="barChartLabels"
+              [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType"></canvas>
+            </div>    
+              </mat-card-content>
+        </mat-card>
+        </div>
+
+
+
+        <div style="margin-top: 10px;display: flex;">
+            <mat-card style="width: 92%;">
+                <mat-card-content>
+                    <mat-card-subtitle></mat-card-subtitle>
+                   
+                <div style="height:520px;">
+                    <mat-spinner *ngIf="!chart2" style="margin: 0 auto;"></mat-spinner>
+                 
+                    
+                    <mat-table *ngIf="chart2" mat-table [dataSource]="sessions" class="mat-elevation-z8" matSort>
+             
+                        <!--- Note that these columns can be defined in any order.
+                        The actual rendered columns are set as a property on the row definition" -->
+                
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="district">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "district" | translate }}</mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+                        </ng-container>
+            
+                        <ng-container matColumnDef="programmaticArea">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "programmatic_area" | translate }}</mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.programmaticArea}} </mat-cell>
+                        </ng-container>
+            
+                        <ng-container matColumnDef="totalSubmited">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "totalSubmited" | translate }}</mat-header-cell>
+                          <mat-cell *matCellDef="let element">  {{element.totalSubmited}} </mat-cell>
+                        </ng-container>
+            
+                        <ng-container matColumnDef="lastUpdate">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "lastUpdate" | translate }}</mat-header-cell>
+                          <mat-cell *matCellDef="let element"> {{element.lastUpdate | date:'dd-MM-yyyy HH:mm:ss'}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns;sticky: false"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                      </mat-table>
+                      <br>
+                      <mat-paginator  [length]="total" [pageSize]="8"
+                      [pageSizeOptions]="[8]" showFirstLastButtons></mat-paginator>
+
+                      <button *ngIf="chart2" style="background-color:orange;margin-top: -30px;" (click)="download()" matTooltipPosition="before" mat-fab matTooltip="{{ 'download' | translate }}" color="primary" >
+                        <mat-icon>file_download</mat-icon>
+                      </button
+                      >
+
+
+
+                </div>    
+                  </mat-card-content>
+            </mat-card>
+            </div>
+
+            <div style="margin-top: 25px;display: flex;">
+                <mat-card style="width: 92%;">
+                    <mat-card-content>
+                        <mat-card-subtitle>Sessões submetidas nos últimos 12 meses</mat-card-subtitle>
+                        
+                    <div style="height:450px;">
+                        <mat-spinner *ngIf="!chart3" style="margin: 0 auto;"></mat-spinner>
+                        <canvas *ngIf="chart3" baseChart  [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions"
+                        [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                    </div>    
+                      </mat-card-content>
+                </mat-card>
+                </div>
+
+
+</div>
+
+
+

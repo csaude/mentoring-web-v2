@@ -1,0 +1,242 @@
+<h1 mat-dialog-title *ngIf="data.id">{{ "edit" | translate }} {{ "form" | translate }}</h1>
+
+<div mat-dialog-content>
+  
+ 
+    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="formGroup">
+          <br>
+          <form [formGroup]="formGroup">
+            <ng-template matStepLabel>{{ "form" | translate }}</ng-template>
+
+            <mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>
+
+              <mat-form-field style="width: 100%;">
+                  <mat-label>{{ "name" | translate }} *</mat-label>
+                  <input type="text" matInput placeholder="{{ 'name' | translate }}" [(ngModel)]="data.name" formControlName="name">
+                </mat-form-field>
+      
+              <mat-form-field style="width: 47%;">
+                <mat-label>{{ "form_type" | translate }} *</mat-label>
+                <mat-select [(ngModel)]="data.formType" [compareWith]="compareObjects1" formControlName="form_type" panelClass="panel-override">
+                <mat-option *ngFor="let q of formtypes" [value]="q">{{q | translate}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field style="margin-left:3%;width: 50%;">
+              <mat-label>{{ "programmatic_area" | translate }} *</mat-label>
+              <mat-select [(ngModel)]="data.programmaticArea" [compareWith]="compareObjects2" formControlName="programmatic_area" panelClass="panel-override">
+              <mat-option *ngFor="let q of programmaticAreas" [value]="q">{{q.name}}</mat-option>
+              </mat-select>
+          </mat-form-field>
+
+            <mat-form-field style="width: 47%;">
+              <mat-label>{{ "target_patient" | translate }} *</mat-label>
+              <input type="number" matInput placeholder="{{ 'target_patient' | translate }}" [(ngModel)]="data.targetPatient" formControlName="target_patient">
+            </mat-form-field>
+      
+            <mat-form-field style="margin-left:3%;width: 50%;">
+              <mat-label>{{ "target_file" | translate }} *</mat-label>
+              <input type="number" matInput placeholder="{{ 'target_file' | translate }}" [(ngModel)]="data.targetFile" formControlName="target_file">
+            </mat-form-field>
+
+            <mat-form-field style="width: 100%;">
+              <textarea rows="3"  placeholder="{{ 'description' | translate }} *" matInput maxlength="255" [(ngModel)]="data.description" formControlName="description"></textarea>
+            </mat-form-field>
+      
+            <div>
+              <button  mat-raised-button color="warn" (click)="onNoClick(data)">{{ "close" | translate }}</button>&nbsp;
+              <button mat-raised-button color="primary" matStepperNext>{{ "next" | translate }}</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="formGroup">
+          <form [formGroup]="formGroup">
+            <ng-template matStepLabel>{{ "questions" | translate }}</ng-template>
+          
+            <mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>
+            <div *ngIf="isHidden=='hide'" >
+
+              <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ "add" | translate }} {{ "questions" | translate }}
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    {{ "addquestions" | translate }}
+                  </mat-panel-description>
+                </mat-expansion-panel-header>            
+                
+                <div style="display: flex;align-items: flex-end; margin-left: 5px;">
+                  <form [formGroup]="formSearch">
+          
+                      <mat-form-field >
+                          <mat-label>{{ "search_by" | translate }} {{ "code" | translate }}</mat-label>
+                          <input [(ngModel)]="code" formControlName="code" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'code' | translate }}">
+                         
+        
+                </mat-form-field>
+          
+          
+              <mat-form-field style="margin-left: 30px;" >
+                  <mat-label>{{ "search_by" | translate }} {{ "question" | translate }}</mat-label>
+                  <input [(ngModel)]="name" formControlName="name" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'question' | translate }}">
+                 
+              </mat-form-field>
+              
+              <mat-form-field style="margin-left: 30px;" >
+                <mat-label>{{ "type" | translate }}</mat-label>
+                <mat-select formControlName="type" >
+                  <mat-option value="" selected>{{ "all" | translate }}</mat-option>
+                  <mat-option value="TEXT" >{{ "TEXT" | translate }}</mat-option>
+                  <mat-option value="NUMERIC" >{{ "NUMERIC" | translate }}</mat-option>
+                  <mat-option value="BOOLEAN" >{{ "BOOLEAN" | translate }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+          
+                   <button style="margin-left: 30px;" (click)="search()" mat-raised-button>{{ "search" | translate }}</button>
+                  
+                  
+          </form>
+              </div>
+
+              <mat-progress-bar mode="indeterminate" *ngIf="isHidden2==''"></mat-progress-bar>
+
+              <mat-table mat-table style="box-shadow: none !important; overflow-y: scroll; max-height: 300px;" [dataSource]="questions" class="mat-elevation-z8" matSort>
+             
+                <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+        
+                <!-- Name Column -->
+                <ng-container matColumnDef="code2" class="cell2">
+                  <mat-header-cell class="cell2" *matHeaderCellDef mat-sort-header>{{ "code" | translate }}</mat-header-cell>
+                  <mat-cell class="cell2" *matCellDef="let element"> {{element.code}} </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="question2">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "question" | translate }}</mat-header-cell>
+                  <mat-cell *matCellDef="let element"> {{element.question}} </mat-cell>
+                </ng-container>
+    
+                <ng-container matColumnDef="type2">
+                  <mat-header-cell *matHeaderCellDef>{{ "type" | translate }}</mat-header-cell>
+                  <mat-cell *matCellDef="let element">
+                    {{ element.questionType | translate }}
+                  </mat-cell>
+                </ng-container>
+    
+                <!-- Actions -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                  <mat-cell *matCellDef="let element" style="justify-content: flex-end;">
+                    <button (click)="addQuestion(element)" mat-icon-button [disabled]="isHidden2==''">
+                      <mat-icon style="color: green;">add_circle</mat-icon>
+                    </button>
+  
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns2;sticky: true"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
+              </mat-table>
+
+
+              </mat-expansion-panel>
+              
+              </mat-accordion>
+
+              <br><br>
+            <mat-table  style="box-shadow: none !important; overflow-y: scroll; max-height: 350px;" mat-table [dataSource]="formQuestions" class="mat-elevation-z8" matSort>
+  
+            
+              <ng-container matColumnDef="sequence">
+                <mat-header-cell *matHeaderCellDef> {{ "sequence" | translate }} </mat-header-cell>
+                <mat-cell *matCellDef="let element"> 
+                  
+                  
+
+                  <mat-form-field style="width: 85%;">
+                    <mat-select [(value)]="element.sequence" (selectionChange)="onChangeSequence(element)" panelClass="panel-override">
+                    <mat-option *ngFor="let i of generateArray()" [value]="i" >{{i}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                
+                
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="code">
+                <mat-header-cell *matHeaderCellDef> {{ "code" | translate }} </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.question.code}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="applicable">
+                <mat-header-cell *matHeaderCellDef> {{ "applicable" | translate }} </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+
+
+                  <mat-form-field style="width: 85%;">
+                    <mat-select [(value)]="element.applicable" (selectionChange)="onChangeApplicable(element)" panelClass="panel-override">
+                    <mat-option *ngFor="let i of opts" [value]="i.id" >{{i.name | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="question">
+                <mat-header-cell *matHeaderCellDef> {{ "question" | translate }} </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.question.question}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="questionType">
+                <mat-header-cell *matHeaderCellDef> {{ "question_type" | translate }} </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.question.questionType | translate}} </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+                <mat-cell *matCellDef="let element" style="justify-content: flex-end; margin-right: 25px;">
+                
+                  <button mat-icon-button (click)="onDeleteClick(element)" [disabled]="isHidden==''">
+                    <mat-icon style="color:red">delete</mat-icon>
+                  </button>
+                
+                </mat-cell>
+              </ng-container>
+             
+              <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true" style="min-height: 35px;"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;" style="min-height: 30px;"></mat-row>
+            </mat-table >
+           
+          </div>
+
+<br>
+
+            <div>
+              <button mat-raised-button color="warn" (click)="onNoClick(data)">{{ "close" | translate }}</button>&nbsp;
+              <button  mat-raised-button matStepperPrevious color="secondary">{{ "back" | translate }}</button>&nbsp;
+              <button  mat-raised-button matStepperNext color="primary">{{ "next" | translate }}</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>{{ "done" | translate }}</ng-template>
+          {{ "end" | translate }}
+          <div>
+            <br>
+            <button  mat-raised-button matStepperPrevious color="secondary">{{ "back" | translate }}</button>&nbsp;
+            <button mat-raised-button color="primary" [disabled]="isDisabled" (click)="onSaveClick(data)">{{ "save" | translate }}</button>
+            <mat-progress-bar mode="indeterminate" *ngIf="isDisabled"></mat-progress-bar>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+
+
+
+
+  
+    
+
+</div>

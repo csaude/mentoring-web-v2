@@ -1,0 +1,31 @@
+<h1 mat-dialog-title *ngIf="data.id">{{ "associate_to" | translate }} {{ "programmatic_area" | translate }}</h1>
+
+<div mat-dialog-content>
+
+    <h3 class="mat-h3" style="color: lightgrey;">{{ "tutor" | translate }}:</h3>
+    <section class="mat-h3">
+       {{data.name}} {{data.surname}} <br>
+       {{data.email}} <br>
+       {{data.phoneNumber}}
+      </section>
+      <h3 class="mat-h3" style="color: lightgrey;">{{ "programmatic_area" | translate }}:</h3>
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick(data)">
+
+        <mat-form-field style="width: 85%;">
+          <mat-label>{{ "programmatic_area" | translate }} *</mat-label>
+          <mat-select [compareWith]="compareObjects2" formControlName="programmatic_area" panelClass="panel-override">
+          <mat-option *ngFor="let q of programmaticAreas" [value]="q">{{q.description}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+     
+
+</form>  
+
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled" (click)="onSaveClick(data)">{{ "save" | translate }}</button>
+  <button  mat-raised-button color="secondary" (click)="onNoClick(data)">{{ "close" | translate }}</button>
+</div>
+<br>
+<mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>

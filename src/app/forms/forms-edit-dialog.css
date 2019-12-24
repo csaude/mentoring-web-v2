@@ -1,0 +1,13 @@
+.mat-cell {
+  font-size: 12px;
+}
+
+
+
+.mat-column-question {
+    flex: 0 0 50%;
+}
+
+.mat-column-question2 {
+    flex: 0 0 60%;
+}

@@ -1,0 +1,159 @@
+
+<mat-sidenav-container autosize>
+  <mat-sidenav #drawer mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]="63" >
+    
+      <mat-toolbar color="primary">
+          <mat-toolbar-row>
+            <span>Menu</span>
+          </mat-toolbar-row>
+      </mat-toolbar>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/home" >
+        <mat-icon>home</mat-icon>&nbsp;&nbsp;<span class="nav-caption" >{{ "home_page" | translate }}</span>
+      </a>
+      
+      <a mat-list-item (click)="printListExcel()">
+        <mat-icon>file_download</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "download" | translate }}</span>
+      </a>
+
+    <a mat-list-item routerLink="/forms">
+      <mat-icon>link</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "manage" | translate }} {{ "forms" | translate }}</span>
+    </a>
+
+    <a mat-list-item routerLink="/tutoreds">
+      <mat-icon>link</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "manage" | translate }} {{ "tutoreds" | translate }}</span>
+    </a>
+
+
+  </mat-nav-list>
+
+  </mat-sidenav>
+  <mat-sidenav-content style="padding: 10px; margin-top: 75px;">
+
+      <span style="display: inline-flex;">
+        <button mat-mini-fab color="basic" (click)="drawer.toggle()" (click)="changeIcon()" matTooltip="Esconder / Mostrar menu laterals"><mat-icon>{{icon}}</mat-icon> </button>
+        &nbsp;&nbsp;<h1 class="mat-h1" style="margin-top: 7px;">{{ "manage" | translate }} {{ "tutors" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></h1>
+      </span>
+
+
+      <div style="display: flex;align-items: flex-end; margin-left: 5px;">
+        <form [formGroup]="form">
+         
+            <mat-form-field >
+                <mat-label>{{ "search_by" | translate }} {{ "code" | translate }}</mat-label>
+                <input [(ngModel)]="code" formControlName="code" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'code' | translate }}">
+               
+                <button mat-button mat-icon-button matSuffix (click)="clearCodeField()" *ngIf="code">
+                  <mat-icon>close</mat-icon>
+              </button>
+      </mat-form-field>
+
+
+    <mat-form-field style="margin-left: 30px;" >
+        <mat-label>{{ 'search_by' | translate }} {{ 'name' | translate }}</mat-label>
+        <input [(ngModel)]="name" formControlName="name" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'name' | translate }}">
+        <button mat-button mat-icon-button matSuffix (click)="clearNameField()" *ngIf="name">
+          <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field style="margin-left: 30px;" >
+      <mat-label>{{ 'search_by' | translate }} {{ 'surname' | translate }}</mat-label>
+      <input [(ngModel)]="surname" formControlName="surname" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'surname' | translate }}">
+      <button mat-button mat-icon-button matSuffix (click)="clearSurnameField()" *ngIf="surname">
+        <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field style="margin-left: 30px;" >
+    <mat-label>{{ 'search_by' | translate }} {{ 'phone' | translate }}</mat-label>
+    <input [(ngModel)]="phone" formControlName="phone" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'phone' | translate }}">
+    <button mat-button mat-icon-button matSuffix (click)="clearPhoneField()" *ngIf="phone">
+      <mat-icon>close</mat-icon>
+  </button>
+</mat-form-field>
+    
+    
+
+<button style="margin-left: 30px;" (click)="search()" mat-raised-button>{{ "search" | translate }}</button>
+</form>
+    </div>
+
+    
+       
+        <mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>
+        <section class="mat-typography">
+        <span class="info-label" *ngIf="isHidden==''">{{ "loading" | translate }}</span>
+      </section>
+
+      
+          <mat-table mat-table [dataSource]="tutors" class="mat-elevation-z8" matSort>
+             
+            <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+    
+            <!-- Name Column -->
+            <ng-container matColumnDef="code">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "code" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.code}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "name" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="surname">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "surname" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.surname}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="position">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "position" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.career.position}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="phone">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "phone" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.phoneNumber}} </mat-cell>
+            </ng-container>
+
+      
+    
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef></mat-header-cell>
+              <mat-cell *matCellDef="let element" style="text-align: center;">
+                <button mat-icon-button [matMenuTriggerFor]="menu" [disabled]="isHidden==''">
+                  <mat-icon *ngIf="element.isUser=='true'">more_vert</mat-icon>
+                  <mat-icon style="color:red" *ngIf="element.isUser=='false'">more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+               
+                  <button mat-menu-item (click)="setQuestionEdit(element.uuid)">
+                    <mat-icon>mode_edit</mat-icon>
+                    <span>{{ "edit" | translate }}</span>
+                  </button>
+
+                  <button mat-menu-item (click)="setPAEdit(element.uuid)">
+                    <mat-icon>group</mat-icon>
+                    <span>{{ "associate_to" | translate }} {{ "programmatic_area" | translate }}</span>
+                  </button>
+                 
+                </mat-menu>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <br>
+          <mat-paginator  [length]="tutors1.length" [pageSize]="10"
+          [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+          <br><br>
+          <button (click)="openDialogNew()" matTooltipPosition="before" mat-fab matTooltip="{{ 'add' | translate }} {{ 'tutor' | translate }}" color="primary" class="fab-bottom-right">
+            <mat-icon>add</mat-icon>
+          </button>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,45 @@
+<h1 mat-dialog-title >{{ "new" | translate }} {{ "question" | translate }}</h1>
+
+<div mat-dialog-content>
+  
+ 
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick(data)">
+
+        <mat-form-field style="width: 100%;">
+            <textarea rows="3"  placeholder="{{ 'question' | translate }} *" matInput maxlength="255" [(ngModel)]="data.question" formControlName="question"></textarea>
+       </mat-form-field>
+       <br><br>
+
+           <mat-form-field style="width: 100%;">
+            <mat-label>{{ "type" | translate }} *</mat-label>
+            <mat-select [(ngModel)]="data.questionType" formControlName="questionType" panelClass="panel-override">
+            <mat-option>{{ "select" | translate }}</mat-option>
+            <mat-option *ngFor="let q of questionTypes" [value]="q">{{ q | translate }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 85%;">
+          <mat-label>{{ "category" | translate }} *</mat-label>
+          <mat-select [(ngModel)]="data.questionsCategory" formControlName="questionsCategory" panelClass="panel-override">
+          <mat-option>{{ "select" | translate }}</mat-option>
+          <mat-option *ngFor="let q of questionsCategory" [value]="q">{{q.category}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <a (click)="addQuestionsCategory()" mat-icon-button matTooltip="{{ 'add' | translate }}">
+        <mat-icon>add</mat-icon>
+      </a>
+
+      <a (click)="reloadQuestionsCategory()" mat-icon-button matTooltip="{{ 'refresh' | translate }}">
+        <mat-icon>refresh</mat-icon>
+      </a>
+
+     </form>
+  
+<br><br>
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled||isHidden==''" (click)="onSaveClick(data)">Salvar</button>
+  <button  mat-raised-button color="secondary" (click)="onNoClick(data)">Fechar</button>
+</div>

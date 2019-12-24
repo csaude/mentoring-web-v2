@@ -1,0 +1,26 @@
+<h1 mat-dialog-title *ngIf="data.id">{{ "edit" | translate }} {{ "programmatic_area" | translate }}</h1>
+
+<div mat-dialog-content>
+  
+ 
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick(data)">
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>{{ "name" | translate }} *</mat-label>
+            <input type="text" matInput placeholder="{{ 'name' | translate }}" [(ngModel)]="data.name" formControlName="name">
+          </mat-form-field>
+
+       <mat-form-field style="width: 100%;">
+          <mat-label>{{ 'description' | translate }} *</mat-label>
+            <textarea rows="3"  placeholder="{{ 'description' | translate }}" matInput maxlength="255" [(ngModel)]="data.description" formControlName="description"></textarea>
+       </mat-form-field>
+       <br><br>
+
+</form>  
+
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled||isHidden==''" (click)="onSaveClick(data)">{{ "save" | translate }}</button>
+  <button  mat-raised-button color="secondary" (click)="onNoClick(data)">{{ "close" | translate }}</button>
+</div>

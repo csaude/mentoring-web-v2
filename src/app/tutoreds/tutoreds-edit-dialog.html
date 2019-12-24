@@ -1,0 +1,45 @@
+<h1 mat-dialog-title *ngIf="data.id">{{ "edit" | translate }} {{ "tutored" | translate }}</h1>
+
+<div mat-dialog-content>
+  
+ 
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick(data)">
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>{{ "name" | translate }} *</mat-label>
+            <input type="text" matInput placeholder="{{ 'name' | translate }}" [(ngModel)]="data.name" formControlName="name">
+          </mat-form-field>
+
+          <mat-form-field style="width: 100%;">
+            <mat-label>{{ "surname" | translate }} *</mat-label>
+            <input type="text" matInput placeholder="{{ 'surname' | translate }}" [(ngModel)]="data.surname" formControlName="surname">
+          </mat-form-field>
+
+          <mat-form-field style="width: 85%;">
+            <mat-label>{{ "category" | translate }} *</mat-label>
+            <mat-select [(ngModel)]="data.career" (ngModelChange)="onChange($event)" [compareWith]="compareObjects" formControlName="career" panelClass="panel-override">
+            <mat-option *ngFor="let q of careers" [value]="q">{{ q.careerType | translate }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 85%;">
+          <mat-label>{{ "position" | translate }} *</mat-label>
+          <mat-select [(ngModel)]="data.career" [compareWith]="compareObjects2" formControlName="position" panelClass="panel-override">
+          <mat-option *ngFor="let q of careerPositions" [value]="q">{{q.position}}</mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field style="width: 100%;">
+        <mat-label>{{ "phone" | translate }} *</mat-label>
+        <input type="text" matInput placeholder="{{ 'phone' | translate }}" [(ngModel)]="data.phoneNumber" formControlName="phoneNumber">
+      </mat-form-field>
+     
+
+</form>  
+
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled" (click)="onSaveClick(data)">{{ "save" | translate }}</button>
+  <button  mat-raised-button color="secondary" (click)="onNoClick(data)">{{ "close" | translate }}</button>
+</div>

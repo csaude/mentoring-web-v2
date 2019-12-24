@@ -1,0 +1,20 @@
+<h1 mat-dialog-title >Reset Password</h1>
+
+<div mat-dialog-content>
+  
+ 
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick()">
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>Email *</mat-label>
+            <input type="email" matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
+     </form>
+     <mat-progress-bar mode="indeterminate" *ngIf="isDisabled"></mat-progress-bar>
+<br><br>
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled||isHidden==''" (click)="onSaveClick()">RESET</button>
+  <button  mat-raised-button color="secondary" [disabled]="isDisabled||isHidden==''" (click)="onNoClick()">Fechar</button>
+</div>

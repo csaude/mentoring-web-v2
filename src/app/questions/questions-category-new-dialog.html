@@ -1,0 +1,20 @@
+<h1 mat-dialog-title >{{ "new" | translate }} {{ "question_category" | translate }}</h1>
+
+<div mat-dialog-content>
+  
+ 
+  
+    <form [formGroup]="form" (ngSubmit)="onSaveClick(data)">
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>{{ "category" | translate }} *</mat-label>
+            <input type="text" matInput placeholder="{{ 'category' | translate }}" [(ngModel)]="data.category" formControlName="category">
+            </mat-form-field>
+     </form>
+  
+<br><br>
+</div>
+<div mat-dialog-actions>
+  <button  mat-raised-button color="primary" [disabled]="!form.valid||isDisabled||isHidden==''" (click)="onSaveClick(data)">{{ "save" | translate }}</button>
+  <button  mat-raised-button color="secondary" (click)="onNoClick(data)">{{ "close" | translate }}</button>
+</div>

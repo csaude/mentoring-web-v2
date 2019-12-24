@@ -1,0 +1,449 @@
+
+<mat-sidenav-container autosize>
+  <mat-sidenav #drawer mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]="63" >
+    
+      <mat-toolbar color="primary">
+          <mat-toolbar-row>
+            <span>Menu</span>
+          </mat-toolbar-row>
+      </mat-toolbar>
+
+    <mat-nav-list>
+      <a mat-list-item routerLink="/home" >
+        <mat-icon>home</mat-icon>&nbsp;&nbsp;<span class="nav-caption" >{{ "home_page" | translate }}</span>
+      </a>
+      
+      <a mat-list-item (click)="printListExcel()">
+        <mat-icon>file_download</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "download" | translate }}</span>
+      </a>
+
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <span>{{ "reports" | translate }}</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
+    <a mat-list-item (click)="getSamples()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_samples" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getAnalyse()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_analyses" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getSessions()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessions" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getSessionsList()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessionslist" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getHTS()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_hts" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getNarrative()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative" | translate }}</span>
+    </a>
+
+
+  </mat-nav-list>
+
+  </mat-sidenav>
+  <mat-sidenav-content style="padding: 10px; margin-top: 75px;">
+
+      <span style="display: inline-flex;">
+        <button mat-mini-fab color="basic" (click)="drawer.toggle()" (click)="changeIcon()" matTooltip="Esconder / Mostrar menu laterals"><mat-icon>{{icon}}</mat-icon> </button>
+        &nbsp;&nbsp;<h1 class="mat-h1" style="margin-top: 7px;">
+          
+          <span *ngIf="isClosed">{{ "view" | translate }} {{ "reports" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&samples">{{ "report_samples" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&analyse">{{ "report_analyses" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&sessions">{{ "report_sessions" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&sessionslist">{{ "report_sessionslist" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&hts">{{ "report_hts" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&narrative">{{ "report_narrative" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+        </h1>
+      </span>
+
+      <div *ngIf="isClosed">
+
+        <p>{{"select_from_left_menu"| translate}}</p>
+
+      </div>
+
+<div *ngIf="isClosed==false">
+      <div style="display: flex;align-items: flex-end; margin-left: 5px;">
+        <form [formGroup]="form">
+         
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" (click)="picker.open()" autocomplete="off" onkeypress="return false;" placeholder="Data Inicial" formControlName="from"> 
+            <mat-datepicker-toggle matPrefix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field style="margin-left: 10px;">
+              <input matInput [matDatepicker]="picker2" autocomplete="off" (click)="picker2.open()" onkeypress="return false;" placeholder="Data Final"   formControlName="until"> 
+              <mat-datepicker-toggle matPrefix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+<button style="margin-left: 30px;" (click)="search()" mat-raised-button>{{ "search" | translate }}</button>
+</form>
+    </div>
+
+</div>
+<div>
+       
+        <mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>
+        <section class="mat-typography">
+        <span class="info-label" *ngIf="isHidden==''">{{ "loading" | translate }}</span>
+      </section>
+
+      
+          <mat-table *ngIf="samples" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+            <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+    
+            <!-- Name Column -->
+            <ng-container matColumnDef="district">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "district" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="hf">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "hf" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.healthFacility}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="form">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.form}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="samples_collected">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_collected" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.collectedSamples}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="samples_reffered">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_reffered" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.transportedSamples}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="samples_rejected">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_rejected" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.rejectedSamples}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="results_received">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "results_received" | translate }}</mat-header-cell>
+              <mat-cell *matCellDef="let element"> {{element.receivedSamples}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+
+<!--Analyse-->
+<mat-table *ngIf="analyse" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.form}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="samples_collected">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_collected" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.collectedSamples}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="samples_reffered">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_reffered" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.referredSamples}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="samples_rejected">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_rejected" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.rejectedSamples}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="results_received">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "results_received" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.receivedResult}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="samples_reffered_p">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_reffered_p" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.transportation}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="samples_rejected_p">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "samples_rejected_p" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.rejection}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="results_received_p">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "results_received_p" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.result}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="results_received_p_total">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "results_received_p_total" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.totalResult}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsAnalyse;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsAnalyse;"></mat-row>
+</mat-table>
+
+<!--Sessions-->
+<mat-table *ngIf="sessions" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.formName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="total">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "total" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.totalPerformed}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessions;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessions;"></mat-row>
+</mat-table>
+
+<mat-table *ngIf="sessionslist" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.formName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date_send">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "date_send" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.createdAt}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date_session">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "date_session" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.performedDate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="district">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "district" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="hf">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "hf" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.healthFacility}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="cabinet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "cabinet" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.cabinet}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tutor">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tutor" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tutorName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="position">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "position" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.position}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="start">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "start" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.startDate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="end">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "end2" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.endDate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="state">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "state" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessionsList;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessionsList;"></mat-row>
+</mat-table>
+
+<mat-table *ngIf="hts" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="district">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "district" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="hf">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "hf" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.healthFacility}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date_session">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "date_session" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.performedDate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tutor">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tutor" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tutorName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tutored">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tutored" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tutoredName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="cabinet">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "sector" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.cabinet}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="door">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "door" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.door}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="time_of_day">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "time_of_day" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.timeOfDay}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="q1">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "HTS_q1" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.atendidos}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="q2">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "HTS_q2" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.previos}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="q3">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "HTS_q3" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.testados}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="q4">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "HTS_q4" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.positivos}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="q5">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "HTS_q5" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.inscritos}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessionsHTS;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessionsHTS;"></mat-row>
+</mat-table>
+
+
+<mat-table *ngIf="narrative" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="district">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "province" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="saaj">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "saaj" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.saaj}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="htcLink">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "htcLink" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.htcLink}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="smi">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "smi" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.smi}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="stiAdultsPrison">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "stiAdultsPrison" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.stiAdultsPrison}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctAdultsPrison">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctAdultsPrison" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctAdultsPrison}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctAdults">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctAdults" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctAdults}} </mat-cell>
+  </ng-container>
+  
+  <ng-container matColumnDef="apss">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "apss" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.apss}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="adultVl">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "adultVl" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.adultVl}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tbHiv">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbHiv" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tbHiv}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tpi">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tpi" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tpi}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="nutrition">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "nutrition" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.nutrition}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessionsNarrative;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessionsNarrative;"></mat-row>
+</mat-table>
+
+
+          <br>
+          <mat-paginator *ngIf="!isClosed"  [length]="reports1.length" [pageSize]="10"
+          [pageSizeOptions]="[10, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+
+        </div>
+
+
+  </mat-sidenav-content>
+
+
+</mat-sidenav-container>
