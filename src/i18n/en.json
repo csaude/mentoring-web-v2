@@ -130,6 +130,7 @@
 "tpi":"# of adult INH specific clinical mentoring sessions",
 "nutrition":"# of nutrition-specific clinical mentoring sessions for adults",
 "totalSubmited":"Total submitted",
-"lastUpdate":"Last submission"
+"lastUpdate":"Last submission",
+"report_indicators": "POP Indicators"
 
 }

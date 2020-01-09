@@ -47,6 +47,10 @@
       <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative" | translate }}</span>
     </a>
 
+    <a mat-list-item (click)="getIndicators()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_indicators" | translate }}</span>
+    </a>
+
 
   </mat-nav-list>
 
@@ -64,6 +68,8 @@
           <span *ngIf="!isClosed&&sessionslist">{{ "report_sessionslist" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
           <span *ngIf="!isClosed&&hts">{{ "report_hts" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
           <span *ngIf="!isClosed&&narrative">{{ "report_narrative" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&indicators">{{ "report_indicators" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+        
         </h1>
       </span>
 
@@ -435,6 +441,27 @@
   <mat-row *matRowDef="let row; columns: displayedColumnsSessionsNarrative;"></mat-row>
 </mat-table>
 
+
+<!--Indicators-->
+<mat-table *ngIf="indicators" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.formName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="total">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "total" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.totalPerformed}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessions;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessions;"></mat-row>
+</mat-table>
 
           <br>
           <mat-paginator *ngIf="!isClosed"  [length]="reports1.length" [pageSize]="10"

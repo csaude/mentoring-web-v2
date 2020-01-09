@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit {
   public phone: string;
   public total: number;
 
-  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative: boolean;
+  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators: boolean;
 
   public from;until;
   
@@ -327,6 +327,45 @@ export class ReportsComponent implements OnInit {
       );
   }
 
+  getPageSessionsIndicators() {
+    this.reports = [];
+    this.reports1 = [];
+    this.isHidden = "";
+    this.reportsService.findMentoringSessionsIndicators(this.from, this.until)
+      .subscribe(data => {
+      
+
+        if(data&&!data.performedSession.length){
+          this.reports1.push(data.performedSession);
+          this.reports = new MatTableDataSource(this.reports1);
+          
+        }
+        else if(data&&data.performedSession.length>1){
+            this.reports1=data.performedSession;
+            this.reports = new MatTableDataSource(this.reports1);
+            this.reports.sort = this.sort;
+            this.reports.paginator = this.paginator;
+            
+          }
+          
+          else{
+            this.isHidden = "hide";
+            this.reports = [];
+            this.reports1 = [];
+          } 
+      },
+        error => {
+          this.isHidden = "hide";
+          this.reports = [];
+          this.reports1 = [];
+        },
+        () => {
+          this.total=this.reports1.length;
+          this.isHidden = "hide";
+        }
+      );
+  }
+
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -340,6 +379,7 @@ export class ReportsComponent implements OnInit {
     this.analyse = false;
     this.sessions = false;
     this.sessionslist = false;
+    this.indicators = false;
     this.hts = false;
     this.narrative = false;
     this.reports1=[];
@@ -347,6 +387,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getAnalyse(){
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = true;
@@ -359,6 +400,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getSessions(){
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -371,6 +413,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getSessionsList(){
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -383,6 +426,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getHTS(){
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -395,6 +439,7 @@ export class ReportsComponent implements OnInit {
   }
 
   getNarrative(){
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -402,6 +447,19 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = true;
+    this.reports1=[];
+    this.reports = new MatTableDataSource(this.reports1);
+  }
+
+  getIndicators(){
+    this.indicators = true;
+    this.isClosed=false;
+    this.samples = false;
+    this.analyse = false;
+    this.sessions = false;
+    this.sessionslist = false;
+    this.hts = false;
+    this.narrative = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -424,6 +482,8 @@ export class ReportsComponent implements OnInit {
         this.getPageSessionsHTS();
       }else if(this.narrative){
         this.getPageSessionsNarrative();
+      }else if(this.indicators){
+        this.getPageSessionsIndicators();
       }
 
     }else{
@@ -451,6 +511,9 @@ this.openSnackBar("Deve seleccionar a Data Inicial e a Data Final","OK");
 }else if(this.narrative){
   var report = alasql("SELECT district AS [Province],saaj AS [# of HTC mentoring sessions taking place at SAAJ],htcLink AS [# of mentoring sessions on HTC linkages],smi AS [# of ANC mentoring sessions],stiAdultsPrison AS [# of STI screening-specific clinical mentoring sessions for (new) prisoners on ART],ctAdultsPrison AS [# of adult ART-specific clinical mentoring sessions in prisons],ctAdults AS [# of adult ART-specific clinical mentoring sessions],apss AS [# of PHDP-specific clinical mentoring sessions],adultVl AS [# of adult VL specific clinical mentoring sessions],tbHiv AS [# of TB/HIV-specific clinical mentoring sessions performed in the HIV C&T setting],tpi AS [# of adult INH specific clinical mentoring sessions],nutrition AS [# of nutrition-specific clinical mentoring sessions for adults] FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Dados para o Narrativo ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
+}else if(this.indicators){
+  var report = alasql("SELECT formName AS [Nome do Formulário],totalPerformed AS [Total] FROM ?", [this.reports1]);
+  this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Sessões de Tutoria ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }
 
 
