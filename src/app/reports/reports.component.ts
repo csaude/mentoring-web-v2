@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit {
   public phone: string;
   public total: number;
 
-  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative: boolean;
+  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist: boolean;
 
   public from;until;
   
@@ -48,7 +48,9 @@ export class ReportsComponent implements OnInit {
 
   public displayedColumnsSessionsHTS: string[] = ['district','hf','date_session','tutor','tutored','cabinet','door','time_of_day','q1','q2','q3','q4','q5'];
 
-  public displayedColumnsSessionsNarrative: string[] = ['district','saaj','htcLink','smi','stiAdultsPrison','ctAdultsPrison','ctAdults','apss','adultVl','tbHiv','tpi','nutrition'];
+  public displayedColumnsSessionsNarrative: string[] = ['district','preventionVCT','preventionPICT','preventionIndexCase','preventionSaaj','preventionHtcLink','preventionANC','ctStiAdultsPrison','ctAdultsPrison','ctAdultsVLPrison','ctTbHiv','ctApss','ctAdults','ctAdultsVL','ctInh','ctNutrition','ctApssTutoreds','ctApssSessions','ctEAC','ctCervical','tbSessions','tbSessionsCt','tbInh','tbSessionsPediatric','pediatricNutrition','pediatricStarART','pediatricAMA','pediatricTB','pediatricVL'];
+
+  public displayedColumnsPopList: string[] = ['district','hf','date_session','tutor','form','elaborado','aprovado','revisado'];
 
   constructor(
     public excelService:ExcelService,
@@ -90,6 +92,8 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.indicators = false;
+    this.indicatorslist = false;
 
 
   }
@@ -249,6 +253,45 @@ export class ReportsComponent implements OnInit {
       );
   }
 
+  getPageSessionsIndicatorsList() {
+    this.reports = [];
+    this.reports1 = [];
+    this.isHidden = "";
+    this.reportsService.findMentoringSessionsIndicatorsList(this.from, this.until)
+      .subscribe(data => {
+      
+
+        if(data&&!data.performedSession.length){
+          this.reports1.push(data.performedSession);
+          this.reports = new MatTableDataSource(this.reports1);
+          
+        }
+        else if(data&&data.performedSession.length>1){
+            this.reports1=data.performedSession;
+            this.reports = new MatTableDataSource(this.reports1);
+            this.reports.sort = this.sort;
+            this.reports.paginator = this.paginator;
+            
+          }
+          
+          else{
+            this.isHidden = "hide";
+            this.reports = [];
+            this.reports1 = [];
+          } 
+      },
+        error => {
+          this.isHidden = "hide";
+          this.reports = [];
+          this.reports1 = [];
+        },
+        () => {
+          this.total=this.reports1.length;
+          this.isHidden = "hide";
+        }
+      );
+  }
+
   getPageSessionsHTS() {
     this.reports = [];
     this.reports1 = [];
@@ -327,6 +370,45 @@ export class ReportsComponent implements OnInit {
       );
   }
 
+  getPageSessionsIndicators() {
+    this.reports = [];
+    this.reports1 = [];
+    this.isHidden = "";
+    this.reportsService.findMentoringSessionsIndicators(this.from, this.until)
+      .subscribe(data => {
+      
+
+        if(data&&!data.performedSession.length){
+          this.reports1.push(data.performedSession);
+          this.reports = new MatTableDataSource(this.reports1);
+          
+        }
+        else if(data&&data.performedSession.length>1){
+            this.reports1=data.performedSession;
+            this.reports = new MatTableDataSource(this.reports1);
+            this.reports.sort = this.sort;
+            this.reports.paginator = this.paginator;
+            
+          }
+          
+          else{
+            this.isHidden = "hide";
+            this.reports = [];
+            this.reports1 = [];
+          } 
+      },
+        error => {
+          this.isHidden = "hide";
+          this.reports = [];
+          this.reports1 = [];
+        },
+        () => {
+          this.total=this.reports1.length;
+          this.isHidden = "hide";
+        }
+      );
+  }
+
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -340,13 +422,17 @@ export class ReportsComponent implements OnInit {
     this.analyse = false;
     this.sessions = false;
     this.sessionslist = false;
+    this.indicators = false;
     this.hts = false;
     this.narrative = false;
+    this.indicatorslist = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
 
   getAnalyse(){
+    this.indicatorslist = false;
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = true;
@@ -359,6 +445,8 @@ export class ReportsComponent implements OnInit {
   }
 
   getSessions(){
+    this.indicatorslist = false;
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -371,6 +459,8 @@ export class ReportsComponent implements OnInit {
   }
 
   getSessionsList(){
+    this.indicatorslist = false;
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -383,6 +473,8 @@ export class ReportsComponent implements OnInit {
   }
 
   getHTS(){
+    this.indicatorslist = false;
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -395,6 +487,8 @@ export class ReportsComponent implements OnInit {
   }
 
   getNarrative(){
+    this.indicatorslist = false;
+    this.indicators = false;
     this.isClosed=false;
     this.samples = false;
     this.analyse = false;
@@ -402,6 +496,34 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = true;
+    this.reports1=[];
+    this.reports = new MatTableDataSource(this.reports1);
+  }
+
+  getIndicators(){
+    this.indicatorslist = false;
+    this.indicators = true;
+    this.isClosed=false;
+    this.samples = false;
+    this.analyse = false;
+    this.sessions = false;
+    this.sessionslist = false;
+    this.hts = false;
+    this.narrative = false;
+    this.reports1=[];
+    this.reports = new MatTableDataSource(this.reports1);
+  }
+
+  getIndicatorsList(){
+    this.indicatorslist = true;
+    this.indicators = false;
+    this.isClosed=false;
+    this.samples = false;
+    this.analyse = false;
+    this.sessions = false;
+    this.sessionslist = false;
+    this.hts = false;
+    this.narrative = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -424,6 +546,11 @@ export class ReportsComponent implements OnInit {
         this.getPageSessionsHTS();
       }else if(this.narrative){
         this.getPageSessionsNarrative();
+      }else if(this.indicators){
+        this.getPageSessionsIndicators();
+      }
+      else if(this.indicatorslist){
+        this.getPageSessionsIndicatorsList();
       }
 
     }else{
@@ -446,11 +573,18 @@ this.openSnackBar("Deve seleccionar a Data Inicial e a Data Final","OK");
   var report = alasql("SELECT formName AS [Nome do Formulário],createdAt AS [Data de Envio],performedDate AS [Data da Sessão],district AS [Distrito],healthFacility AS [Unidade Sanitária],cabinet AS [Gabinete],tutorName AS [Tutor], position AS [Position], startDate AS [Início], endDate AS [Fim], status AS [Estado] FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Sessões de Tutoria ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }else if(this.hts){
-  var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],district AS [Distrito],healthFacility AS [Unidade Sanitária],tutorName AS [Tutor],tutoredName AS [Tutorado],cabinet AS [Sector],door AS [Porta], timeOfDay AS [Período],atendidos AS [NUMERO DE PACIENTES ATENDIDOS POR DIA],previos AS [NUMERO DE INDIVIDUOS QUE SABEM QUE SAO HIV POSITIVOS],testados AS [NUMERO DE INDIVIDUOS TESTADOS],positivos AS [NUMERO DE INDIVIDUOS COM TESTE POSITIVO],inscritos AS [NUMERO DE INDIVIDUOS INSCRITOS NOS CUIDADOS E TRATAMENTO DO HIV],createdAt AS [Data de Envio] FROM ?", [this.reports1]);
+  var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],tutorName AS [Tutor],tutoredName AS [Tutorado],cabinet AS [Sector],door AS [Porta], timeOfDay AS [Período],atendidos AS [NUMERO DE PACIENTES ATENDIDOS POR DIA],previos AS [NUMERO DE INDIVIDUOS QUE SABEM QUE SAO HIV POSITIVOS],testados AS [NUMERO DE INDIVIDUOS TESTADOS],positivos AS [NUMERO DE INDIVIDUOS COM TESTE POSITIVO],inscritos AS [NUMERO DE INDIVIDUOS INSCRITOS NOS CUIDADOS E TRATAMENTO DO HIV],createdAt AS [Data de Envio] FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Monitoria do ATS ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }else if(this.narrative){
-  var report = alasql("SELECT district AS [Province],saaj AS [# of HTC mentoring sessions taking place at SAAJ],htcLink AS [# of mentoring sessions on HTC linkages],smi AS [# of ANC mentoring sessions],stiAdultsPrison AS [# of STI screening-specific clinical mentoring sessions for (new) prisoners on ART],ctAdultsPrison AS [# of adult ART-specific clinical mentoring sessions in prisons],ctAdults AS [# of adult ART-specific clinical mentoring sessions],apss AS [# of PHDP-specific clinical mentoring sessions],adultVl AS [# of adult VL specific clinical mentoring sessions],tbHiv AS [# of TB/HIV-specific clinical mentoring sessions performed in the HIV C&T setting],tpi AS [# of adult INH specific clinical mentoring sessions],nutrition AS [# of nutrition-specific clinical mentoring sessions for adults] FROM ?", [this.reports1]);
+  var report = alasql("SELECT district AS [Province],preventionVCT AS [# of HTC mentoring sessions at VCT service points],preventionPICT AS [# of HTC specific mentoring sessions at PITC service points],preventionIndexCase AS [# of HF-level index case testing mentoring sessions to HCWs and lay counselors per month.],preventionSaaj AS [# of HTC mentoring sessions taking place at SAAJ],preventionHtcLink AS [# of mentoring sessions on HTC linkages],preventionANC AS [# of ANC mentoring sessions per quarter],ctStiAdultsPrison AS [# of STI screening-specific clinical mentoring sessions for (new) prisoners on ART],ctAdultsPrison AS [# of adult ART-specific clinical mentoring sessions in prisons],ctAdultsVLPrison AS [# of VL-specific clinical mentoring sessions in prisons],ctTbHiv AS [# of TB/HIV-specific clinical mentoring sessions performed in the HIV care and treatment setting],ctApss AS [# of PHDP-specific clinical mentoring sessions],ctAdults AS [# of adult ART-specific clinical mentoring sessions],ctAdultsVL AS [# of adult VL specific clinical mentoring sessions],ctInh AS [# of adult INH specific clinical mentoring sessions],ctNutrition AS [# of nutrition-specific clinical mentoring sessions for adults],ctApssTutoreds AS [# of HCWs and counselors, who received at least one mentoring session on PSS for improved adherence],ctApssSessions AS [# of PSS mentoring sessions (total)],ctEAC AS [# of EAC-specific clinical mentoring sessions],ctCervical AS [# of Cervical Cancer Screening specific clinical mentoring sessions],tbSessions AS [# of TB screening specific mentoring sessions taking place at clinical consultations],tbSessionsCt AS [# of TB/HIV-specific clinical mentoring sessions performed in the TB C&T setting],tbInh AS [# of INH prophylaxis follow-up mentoring sessions in CCR],tbSessionsPediatric AS [# of pediatric TB/HIV mentoring sessions],pediatricNutrition AS [# of pediatric nutrition-specific clinical mentoring sessions],pediatricStarART AS [# of mentoring sessions on pediatric ART initiation],pediatricAMA AS [# Mentoring sessions on enhanced adherence counseling],pediatricTB AS [# of TB/HIV-specific clinical mentoring sessions performed in the HIV CT setting],pediatricVL AS [# VL specific clinical mentoring sessions] FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Dados para o Narrativo ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
+}else if(this.indicators){
+  var report = alasql("SELECT formName AS [Nome do Formulário],totalPerformed AS [Total] FROM ?", [this.reports1]);
+  this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Submissões Laboratório ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
+}
+else if(this.indicatorslist){
+  var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],tutorName AS [Tutor],formName AS [Formulário], CASE elaborado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Elaborado', CASE aprovado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Aprovado', CASE revisado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Revisado' FROM ?", [this.reports1]);
+  this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Submissões Laboratório ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }
 
 

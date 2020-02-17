@@ -47,6 +47,14 @@
       <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative" | translate }}</span>
     </a>
 
+    <a mat-list-item (click)="getIndicators()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_indicators" | translate }}</span>
+    </a>
+
+    <a mat-list-item (click)="getIndicatorsList()">
+      <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_indicators_list" | translate }}</span>
+    </a>
+
 
   </mat-nav-list>
 
@@ -64,6 +72,9 @@
           <span *ngIf="!isClosed&&sessionslist">{{ "report_sessionslist" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
           <span *ngIf="!isClosed&&hts">{{ "report_hts" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
           <span *ngIf="!isClosed&&narrative">{{ "report_narrative" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&indicators">{{ "report_indicators" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+          <span *ngIf="!isClosed&&indicatorslist">{{ "report_indicators_list" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+
         </h1>
       </span>
 
@@ -376,24 +387,39 @@
     <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="saaj">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "saaj" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.saaj}} </mat-cell>
+  <ng-container matColumnDef="preventionVCT">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionVCT" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionVCT}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="htcLink">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "htcLink" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.htcLink}} </mat-cell>
+  <ng-container matColumnDef="preventionPICT">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionPICT" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionPICT}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="smi">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "smi" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.smi}} </mat-cell>
+  <ng-container matColumnDef="preventionIndexCase">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionIndexCase" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionIndexCase}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="stiAdultsPrison">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "stiAdultsPrison" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.stiAdultsPrison}} </mat-cell>
+  <ng-container matColumnDef="preventionSaaj">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionSaaj" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionSaaj}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="preventionHtcLink">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionHtcLink" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionHtcLink}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="preventionANC">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "preventionANC" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.preventionANC}} </mat-cell>
+  </ng-container>
+  
+  <ng-container matColumnDef="ctStiAdultsPrison">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctStiAdultsPrison" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctStiAdultsPrison}} </mat-cell>
   </ng-container>
 
   <ng-container matColumnDef="ctAdultsPrison">
@@ -401,40 +427,182 @@
     <mat-cell *matCellDef="let element"> {{element.ctAdultsPrison}} </mat-cell>
   </ng-container>
 
+  <ng-container matColumnDef="ctAdultsVLPrison">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctAdultsVLPrison" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctAdultsVLPrison}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctTbHiv">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctTbHiv" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctTbHiv}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctApss">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctApss" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctApss}} </mat-cell>
+  </ng-container>
+
   <ng-container matColumnDef="ctAdults">
     <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctAdults" | translate }}</mat-header-cell>
     <mat-cell *matCellDef="let element"> {{element.ctAdults}} </mat-cell>
   </ng-container>
-  
-  <ng-container matColumnDef="apss">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "apss" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.apss}} </mat-cell>
+
+  <ng-container matColumnDef="ctAdultsVL">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctAdultsVL" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctAdultsVL}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="adultVl">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "adultVl" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.adultVl}} </mat-cell>
+  <ng-container matColumnDef="ctInh">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctInh" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctInh}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="tbHiv">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbHiv" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.tbHiv}} </mat-cell>
+  <ng-container matColumnDef="ctNutrition">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctNutrition" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctNutrition}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="tpi">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tpi" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.tpi}} </mat-cell>
+  <ng-container matColumnDef="ctApssTutoreds">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctApssTutoreds" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctApssTutoreds}} </mat-cell>
   </ng-container>
 
-  <ng-container matColumnDef="nutrition">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "nutrition" | translate }}</mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{element.nutrition}} </mat-cell>
+  <ng-container matColumnDef="ctApssSessions">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctApssSessions" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctApssSessions}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctEAC">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctEAC" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctEAC}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="ctCervical">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ctCervical" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.ctCervical}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tbSessions">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbSessions" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tbSessions}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tbSessionsCt">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbSessionsCt" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tbSessionsCt}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tbInh">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbInh" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tbInh}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tbSessionsPediatric">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tbSessionsPediatric" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tbSessionsPediatric}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pediatricNutrition">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "pediatricNutrition" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pediatricNutrition}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pediatricStarART">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "pediatricStarART" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pediatricStarART}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pediatricAMA">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "pediatricAMA" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pediatricAMA}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pediatricTB">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "pediatricTB" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pediatricTB}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="pediatricVL">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "pediatricVL" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.pediatricVL}} </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumnsSessionsNarrative;sticky: true"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumnsSessionsNarrative;"></mat-row>
 </mat-table>
 
+
+<!--Indicators-->
+<mat-table *ngIf="indicators" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.formName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="total">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "total" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.totalPerformed}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsSessions;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsSessions;"></mat-row>
+</mat-table>
+
+
+<mat-table *ngIf="indicatorslist" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+             
+  <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="district">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "district" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.district}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="hf">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "hf" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.healthFacility}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date_session">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "date_session" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.performedDate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tutor">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "tutor" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.tutorName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="form">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "form" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.formName}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="elaborado">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "Elaborado" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.elaborado=='true'?'Sim':'Não'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="aprovado">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "Aprovado" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.aprovado=='true'?'Sim':'Não'}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="revisado">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "Revisado" | translate }}</mat-header-cell>
+    <mat-cell *matCellDef="let element"> {{element.revisado=='true'?'Sim':'Não'}} </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumnsPopList;sticky: true"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumnsPopList;"></mat-row>
+</mat-table>
 
           <br>
           <mat-paginator *ngIf="!isClosed"  [length]="reports1.length" [pageSize]="10"
