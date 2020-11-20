@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit {
   public phone: string;
   public total: number;
 
-  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist: boolean;
+  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist;pmqtr: boolean;
 
   public from;until;
   
@@ -51,6 +51,8 @@ export class ReportsComponent implements OnInit {
   public displayedColumnsSessionsNarrative: string[] = ['district','preventionVCT','preventionPICT','preventionIndexCase','preventionSaaj','preventionHtcLink','preventionANC','ctStiAdultsPrison','ctAdultsPrison','ctAdultsVLPrison','ctTbHiv','ctApss','ctAdults','ctAdultsVL','ctInh','ctNutrition','ctApssTutoreds','ctApssSessions','ctEAC','ctCervical','tbSessions','tbSessionsCt','tbInh','tbSessionsPediatric','pediatricNutrition','pediatricStarART','pediatricAMA','pediatricTB','pediatricVL'];
 
   public displayedColumnsPopList: string[] = ['district','hf','date_session','tutor','form','elaborado','aprovado','revisado'];
+
+  public displayedColumnsSessionsPMQTR: string[] = ['district','hf','date_session','tutor','tutored','cabinet','i1','i2','i3','i4','i5','i6','i7','i8'];
 
   constructor(
     public excelService:ExcelService,
@@ -94,6 +96,7 @@ export class ReportsComponent implements OnInit {
     this.narrative = false;
     this.indicators = false;
     this.indicatorslist = false;
+    this.pmqtr=false;
 
 
   }
@@ -331,6 +334,46 @@ export class ReportsComponent implements OnInit {
       );
   }
 
+
+  getPageSessionsPMQTR() {
+    this.reports = [];
+    this.reports1 = [];
+    this.isHidden = "";
+    this.reportsService.findMentoringSessionsPMQTR(this.from, this.until)
+      .subscribe(data => {
+      
+
+        if(data&&!data.performedSession.length){
+          this.reports1.push(data.performedSession);
+          this.reports = new MatTableDataSource(this.reports1);
+          
+        }
+        else if(data&&data.performedSession.length>1){
+            this.reports1=data.performedSession;
+            this.reports = new MatTableDataSource(this.reports1);
+            this.reports.sort = this.sort;
+            this.reports.paginator = this.paginator;
+            
+          }
+          
+          else{
+            this.isHidden = "hide";
+            this.reports = [];
+            this.reports1 = [];
+          } 
+      },
+        error => {
+          this.isHidden = "hide";
+          this.reports = [];
+          this.reports1 = [];
+        },
+        () => {
+          this.total=this.reports1.length;
+          this.isHidden = "hide";
+        }
+      );
+  }
+
   getPageSessionsNarrative() {
     this.reports = [];
     this.reports1 = [];
@@ -426,6 +469,7 @@ export class ReportsComponent implements OnInit {
     this.hts = false;
     this.narrative = false;
     this.indicatorslist = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -440,6 +484,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -454,6 +499,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -468,6 +514,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = true;
     this.hts = false;
     this.narrative = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -482,6 +529,22 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = true;
     this.narrative = false;
+    this.pmqtr = false;
+    this.reports1=[];
+    this.reports = new MatTableDataSource(this.reports1);
+  }
+
+  getIndicatorsPMQTR(){
+    this.indicatorslist = false;
+    this.indicators = false;
+    this.isClosed=false;
+    this.samples = false;
+    this.analyse = false;
+    this.sessions = false;
+    this.sessionslist = false;
+    this.hts = false;
+    this.narrative = false;
+    this.pmqtr = true;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -496,6 +559,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = true;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -510,6 +574,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -524,6 +589,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
   }
@@ -551,6 +617,9 @@ export class ReportsComponent implements OnInit {
       }
       else if(this.indicatorslist){
         this.getPageSessionsIndicatorsList();
+      }
+      else if(this.pmqtr){
+        this.getPageSessionsPMQTR();
       }
 
     }else{
@@ -585,6 +654,9 @@ this.openSnackBar("Deve seleccionar a Data Inicial e a Data Final","OK");
 else if(this.indicatorslist){
   var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],tutorName AS [Tutor],formName AS [Formulário], CASE elaborado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Elaborado', CASE aprovado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Aprovado', CASE revisado WHEN 'true' THEN 'Sim' ELSE 'Não' END AS 'Revisado' FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Submissões Laboratório ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
+}else if(this.pmqtr){
+  var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],tutorName AS [Tutor],tutoredName AS [Tutorado],cabinet AS [Sector],formacao AS [(%) FORMAÇÃO E CERTIFICAÇÃO DO PESSOAL], instalacoes AS [(%) INSTALAÇÕES FÍSICAS],seguranca AS [(%) SEGURANÇA],pretestagem AS [(%) FASE PRÉ-TESTAGEM],testagem AS [(%) FASE DE TESTAGEM],postestagem AS [(%) FASE PÓS-TESTAGEM - DOCUMENTOS E REGISTOS],avaliacao AS [(%) AVALIAÇÃO EXTERNA DE QUALIDADE],total AS [% TOTAL], createdAt AS [Data de Envio],mentorship_id FROM ?", [this.reports1]);
+  this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Relatorio PMQ-TR HIV ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }
 
 

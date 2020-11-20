@@ -119,7 +119,7 @@ public total;
 
     this.tutoredService.findSubmitedSessions()
     .subscribe(data => {
-      this.chartSS = data.submitedSessions;
+      this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
       this.chartSS1 = data.submitedSessions;
       this.total=this.chartSS1.length;
       this.sessions = new MatTableDataSource(this.chartSS1);
@@ -132,12 +132,10 @@ public total;
     this.chart2=true;
    
     var label: string[] = [];
-    var label2: string[] = [];
     var value: number[] = [];
 
       for (let l of this.chartSS) {
-        label.push(l.district+" / "+l.programmaticArea);
-        label2.push(l.programmaticArea);
+        label.push(l.district);
         value.push(l.totalSubmited);
       }
 

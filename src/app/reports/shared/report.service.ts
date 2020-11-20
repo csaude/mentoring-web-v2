@@ -61,6 +61,14 @@ export class ReportsService {
 
    }
 
+   findMentoringSessionsPMQTR(from,until) {
+    const params = new HttpParams()
+    .set('endDate', until)
+    .set('startDate', from);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-pmqtr', {params});
+
+   }
+
    findMentoringSessionsNarrative(from,until) {
     const params = new HttpParams()
     .set('endDate', until)
