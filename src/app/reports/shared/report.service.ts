@@ -93,5 +93,13 @@ export class ReportsService {
 
    }
 
+   findMentoringSessionsNarrativeCOP20(from,until) {
+    const params = new HttpParams()
+    .set('endDate', until)
+    .set('startDate', from);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-narrative-cop20', {params});
+
+   }
+
 
 }

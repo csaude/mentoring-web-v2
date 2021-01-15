@@ -46,6 +46,10 @@
                 <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative" | translate }}</span>
             </a>
 
+            <a mat-list-item (click)="getNarrativeCOP20()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative_cop20" | translate }}</span>
+            </a>
+
             <a mat-list-item (click)="getIndicators()">
                 <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_indicators" | translate }}</span>
             </a>
@@ -78,7 +82,8 @@
         <span *ngIf="!isClosed&&indicators">{{ "report_indicators" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
         <span *ngIf="!isClosed&&indicatorslist">{{ "report_indicators_list" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
         <span *ngIf="!isClosed&&pmqtr">{{ "report_pmqtr" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
-
+        <span *ngIf="!isClosed&&narrativeCOP20">{{ "report_narrative_cop20" | translate }} <a matTooltip="{{ 'help' | translate }}" target="_blank" href=""><mat-icon style="vertical-align: middle;">help_outline</mat-icon></a></span>
+        
         </h1>
         </span>
 
@@ -533,6 +538,55 @@
 
                 <mat-header-row *matHeaderRowDef="displayedColumnsSessionsNarrative;sticky: true"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumnsSessionsNarrative;"></mat-row>
+            </mat-table>
+
+
+            <mat-table *ngIf="narrativeCOP20" mat-table [dataSource]="reports" class="mat-elevation-z8" matSort>
+
+                <!--- Note that these columns can be defined in any order.
+  The actual rendered columns are set as a property on the row definition" -->
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="district"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "province" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.district}} </mat-cell></ng-container>
+
+<ng-container matColumnDef="ind_11061"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11061" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11061}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_11011"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11011" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11011}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_11031"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11031" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11031}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_11041"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11041" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11041}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_11043"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11043" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11043}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_11073"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_11073" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_11073}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_42"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_42" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_42}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_10043"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_10043" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_10043}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_10045"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_10045" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_10045}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_04071"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_04071" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_04071}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_04073"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_04073" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_04073}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_04041"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_04041" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_04041}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_04061"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_04061" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_04061}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_15051"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_15051" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_15051}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_06044"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_06044" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_06044}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_02041"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_02041" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_02041}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_01102"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_01102" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_01102}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_01031"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_01031" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_01031}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_01142"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_01142" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_01142}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_02063"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_02063" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_02063}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_01116"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_01116" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_01116}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_02071"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_02071" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_02071}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_02021"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_02021" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_02021}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_02023"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_02023" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_02023}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_03029"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_03029" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_03029}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_03011"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_03011" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_03011}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_03013"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_03013" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_03013}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05012"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05012" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05012}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05031"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05031" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05031}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05061"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05061" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05061}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05052"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05052" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05052}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05054"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05054" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05054}} </mat-cell></ng-container>
+<ng-container matColumnDef="ind_05057"><mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ind_05057" | translate }}</mat-header-cell><mat-cell *matCellDef="let element"> {{element.ind_05057}} </mat-cell></ng-container>
+
+                
+
+                <mat-header-row *matHeaderRowDef="displayedColumnsSessionsNarrativeCOP20;sticky: true"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumnsSessionsNarrativeCOP20;"></mat-row>
             </mat-table>
 
 

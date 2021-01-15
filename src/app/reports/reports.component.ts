@@ -30,7 +30,7 @@ export class ReportsComponent implements OnInit {
   public phone: string;
   public total: number;
 
-  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist;pmqtr: boolean;
+  public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist;pmqtr;narrativeCOP20: boolean;
 
   public from;until;
   
@@ -53,6 +53,9 @@ export class ReportsComponent implements OnInit {
   public displayedColumnsPopList: string[] = ['district','hf','date_session','tutor','form','elaborado','aprovado','revisado'];
 
   public displayedColumnsSessionsPMQTR: string[] = ['district','hf','date_session','tutor','tutored','cabinet','i1','i2','i3','i4','i5','i6','i7','i8'];
+
+  public displayedColumnsSessionsNarrativeCOP20: string[] = ['district','ind_11061','ind_11011','ind_11031','ind_11041','ind_11043','ind_11073','ind_42','ind_10043','ind_10045','ind_04071','ind_04073','ind_04041','ind_04061','ind_15051','ind_06044','ind_02041','ind_01102','ind_01031','ind_01142','ind_02063','ind_01116','ind_02071','ind_02021','ind_02023','ind_03029','ind_03011','ind_03013','ind_05012','ind_05031','ind_05061','ind_05052','ind_05054','ind_05057'];
+
 
   constructor(
     public excelService:ExcelService,
@@ -94,6 +97,7 @@ export class ReportsComponent implements OnInit {
     this.sessionslist = false;
     this.hts = false;
     this.narrative = false;
+    this.narrativeCOP20 = false;
     this.indicators = false;
     this.indicatorslist = false;
     this.pmqtr=false;
@@ -374,6 +378,46 @@ export class ReportsComponent implements OnInit {
       );
   }
 
+  getPageSessionsNarrativeCOP20() {
+    this.reports = [];
+    this.reports1 = [];
+    this.isHidden = "";
+    this.reportsService.findMentoringSessionsNarrativeCOP20(this.from, this.until)
+      .subscribe(data => {
+      
+
+        if(data&&!data.performedSession.length){
+          this.reports1.push(data.performedSession);
+          this.reports = new MatTableDataSource(this.reports1);
+          
+        }
+        else if(data&&data.performedSession.length>1){
+            this.reports1=data.performedSession;
+            this.reports = new MatTableDataSource(this.reports1);
+            this.reports.sort = this.sort;
+            this.reports.paginator = this.paginator;
+            
+          }
+          
+          else{
+            this.isHidden = "hide";
+            this.reports = [];
+            this.reports1 = [];
+          } 
+      },
+        error => {
+          this.isHidden = "hide";
+          this.reports = [];
+          this.reports1 = [];
+        },
+        () => {
+          this.total=this.reports1.length;
+          this.isHidden = "hide";
+        }
+      );
+  }
+
+
   getPageSessionsNarrative() {
     this.reports = [];
     this.reports1 = [];
@@ -468,6 +512,7 @@ export class ReportsComponent implements OnInit {
     this.indicators = false;
     this.hts = false;
     this.narrative = false;
+    this.narrativeCOP20 = false;
     this.indicatorslist = false;
     this.pmqtr = false;
     this.reports1=[];
@@ -483,7 +528,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -498,7 +543,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = true;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -513,7 +558,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = true;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -528,7 +573,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = true;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -543,7 +588,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = true;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -558,7 +603,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = true;
+    this.narrative = true;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -573,7 +618,7 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -588,7 +633,22 @@ export class ReportsComponent implements OnInit {
     this.sessions = false;
     this.sessionslist = false;
     this.hts = false;
-    this.narrative = false;
+    this.narrative = false;this.narrativeCOP20 = false;
+    this.pmqtr = false;
+    this.reports1=[];
+    this.reports = new MatTableDataSource(this.reports1);
+  }
+
+  getNarrativeCOP20(){
+    this.indicatorslist = false;
+    this.indicators = false;
+    this.isClosed=false;
+    this.samples = false;
+    this.analyse = false;
+    this.sessions = false;
+    this.sessionslist = false;
+    this.hts = false;
+    this.narrative = false;this.narrativeCOP20 = true;
     this.pmqtr = false;
     this.reports1=[];
     this.reports = new MatTableDataSource(this.reports1);
@@ -620,6 +680,8 @@ export class ReportsComponent implements OnInit {
       }
       else if(this.pmqtr){
         this.getPageSessionsPMQTR();
+      }else if(this.narrativeCOP20){
+        this.getPageSessionsNarrativeCOP20();
       }
 
     }else{
@@ -657,6 +719,9 @@ else if(this.indicatorslist){
 }else if(this.pmqtr){
   var report = alasql("SELECT district AS [Distrito],healthFacility AS [Unidade Sanitária], performedDate AS [Data da Sessão],tutorName AS [Tutor],tutoredName AS [Tutorado],cabinet AS [Sector],formacao AS [(%) FORMAÇÃO E CERTIFICAÇÃO DO PESSOAL], instalacoes AS [(%) INSTALAÇÕES FÍSICAS],seguranca AS [(%) SEGURANÇA],pretestagem AS [(%) FASE PRÉ-TESTAGEM],testagem AS [(%) FASE DE TESTAGEM],postestagem AS [(%) FASE PÓS-TESTAGEM - DOCUMENTOS E REGISTOS],avaliacao AS [(%) AVALIAÇÃO EXTERNA DE QUALIDADE],total AS [% TOTAL], createdAt AS [Data de Envio],mentorship_id FROM ?", [this.reports1]);
   this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Relatorio PMQ-TR HIV ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
+}else if(this.narrativeCOP20){
+  var report = alasql("SELECT district AS [Province],ind_11061 AS [# of HTC mentoring sessions at VCT service points],ind_11011 AS [# of mentoring sessions on the use of national screening tools],ind_11031 AS [# of HF-level index case testing mentoring sessions to HCWs and lay counselors],ind_11041 AS [# of mentoring sessions on proactive screening of children health cards],ind_11043 AS [# of mentoring sessions on HTC for children and adolescents],ind_11073 AS [# of mentoring sessions on HTC linkages],ind_42 AS [# of HTC mentoring sessions taking place at SAAJ],ind_10043 AS [# of mentoring sessions at SAAJs on HIV and GBV prevention and care],ind_10045 AS [# of mentoring sessions at SAAJs on screening, diagnosis and treatment of STIs],ind_04071 AS [# of mentoring sessions on universal HIV testing for PLW with unknown status],ind_04073 AS [# of mentoring sessions on ANC/CCR index-case testing strategy],ind_04041 AS [# of mentoring sessions on retesting of breastfeeding women according to MoH policy],ind_04061 AS [# of mentoring sessions on use of PSS and positive prevention instruments tailored to support PLW],ind_15051 AS [# of mentoring sessions on the use of approved screening tools and algorithms for the identification of HIV+ KP within HFs],ind_06044 AS [# of mentoring sessions on implementation of routine/universal screening tool as per MOH guidelines],ind_02041 AS [# of mentoring sessions on MOH criteria for offering TLD],ind_01102 AS [# of mentoring sessions on APSS implementation, documentation and reporting],ind_01031 AS [# of mentoring sessions on multi-month ART dispensation],ind_01142 AS [# of mentoring sessions on VL demand creation package],ind_02063 AS [# of mentoring sessions with young adult case managers],ind_01116 AS [# of mentoring activities at prison AJUDA health facilities],ind_02071 AS [# of mentoring sessions on HIV/FP integration],ind_02021 AS [# of MCH/PMTCT and C&T mentoring sessions that include FP competencies],ind_02023 AS [# of mentoring sessions on the use of FP M&E and referral tools],ind_03029 AS [# of mentoring sessions on 3MDD of TPT],ind_03011 AS [# of mentoring sessions at pediatric entry points on TB screening for children and adolescents],ind_03013 AS [# of mentoring sessions on use of GeneXpert],ind_05012 AS [# of mentoring sessions on HIV status disclosure support for children],ind_05031 AS [# of mentoring sessions on implementation of optimized ART regimens for children],ind_05061 AS [# of mentoring sessions on DSD enrollment for children and adolescents],ind_05052 AS [# of mentoring sessions in pediatrics applying the PSS mentoring package],ind_05054 AS [# of mentoring sessions on identification of HIV+ children > 5 years of age at high risk of suboptimal adherence and becoming lost to follow-up],ind_05057 AS [# of mentoring sessions on the transition packages of services for children and adolescents among different HIV services] FROM ?", [this.reports1]);
+  this.excelService.exportAsExcelFile(report, 'Sistema de Tutoria, Dados para o Narrativo COP20 ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
 }
 
 
