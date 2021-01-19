@@ -192,7 +192,15 @@
 ,"ind_05052":"# of mentoring sessions in pediatrics applying the PSS mentoring package "
 ,"ind_05054":"# of mentoring sessions on identification of HIV+ children > 5 years of age at high risk of suboptimal adherence and becoming lost to follow-up  "
 ,"ind_05057":"# of mentoring sessions on the transition packages of services for children and adolescents among different HIV services "
-,"report_narrative_cop20":"Dados para Narrativo COP20"
+,"report_narrative_cop20":"Dados para Narrativo COP20",
+
+"ind_04077":"# of mentoring sessions on the provision of DTG-based treatment regimens to PLW",
+"ind_08051":"# of mentoring sessions on CECAP services provision (VIA, colposcopy and LEEP)",
+"ind_030211":"# of mentoring sessions on TPT cascade",
+"ind_030213":"# of mentoring sessions on identification and reporting of adverse pharmaceutical events (esp. for INH and 3HP)",
+"ind_19051":"# of mentoring sessions to HCW to strengthen diagnostic capacity",
+"ind_19015":"# of mentoring sessions on VL collection"
+
 
 
 }
