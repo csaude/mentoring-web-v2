@@ -1,12 +1,12 @@
 {
-  "/mentoring-integ/*": {
-    "target": "https://dev.fgh.org.mz",
-    "secure": false,
-    "logLevel": "debug"
-  },
-  "/account-manager-web/*": {
-    "target": "https://dev.fgh.org.mz",
-    "secure": false,
-    "logLevel": "debug"
-  }
+    "/mentoring-integ/*": {
+        "target": "https://prod.fgh.org.mz",
+        "secure": false,
+        "logLevel": "debug"
+    },
+    "/account-manager-web/*": {
+        "target": "https://prod.fgh.org.mz",
+        "secure": false,
+        "logLevel": "debug"
+    }
 }

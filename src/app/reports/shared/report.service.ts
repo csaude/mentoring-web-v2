@@ -61,6 +61,22 @@ export class ReportsService {
 
    }
 
+   findMentoringSessionsPMQTR(from,until) {
+    const params = new HttpParams()
+    .set('endDate', until)
+    .set('startDate', from);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-pmqtr', {params});
+
+   }
+
+   findMentoringSessionsPMQTRList(from,until) {
+    const params = new HttpParams()
+    .set('endDate', until)
+    .set('startDate', from);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-pmqtr-list', {params});
+
+   }
+
    findMentoringSessionsNarrative(from,until) {
     const params = new HttpParams()
     .set('endDate', until)
@@ -82,6 +98,14 @@ export class ReportsService {
     .set('endDate', until)
     .set('startDate', from);
    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-indicators-list', {params});
+
+   }
+
+   findMentoringSessionsNarrativeCOP20(from,until) {
+    const params = new HttpParams()
+    .set('endDate', until)
+    .set('startDate', from);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-narrative-cop20', {params});
 
    }
 
