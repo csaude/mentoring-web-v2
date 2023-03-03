@@ -241,6 +241,9 @@ export class DialogEdit implements OnInit{
   public user;tutors: any[];
   public allcareers;careers;careerPositions;tutor;
   public i:number=0;
+
+    //Partners
+    public allpartners;
   
   constructor(
     public tutorsService: TutorsService,
@@ -261,6 +264,8 @@ export class DialogEdit implements OnInit{
             Validators.required]],
         position: ['', [
             Validators.required]],
+            partner: ['', [
+              Validators.required]],
         phoneNumber: ['', [
             Validators.required]],
             email: ['', [Validators.required, Validators.email]]
@@ -289,6 +294,26 @@ export class DialogEdit implements OnInit{
         this.careerPositions = alasql("SELECT * FROM ?allcareers WHERE careerType='"+this.tutor.career.careerType+"'", [this.allcareers]);
       }
     ); 
+
+
+    //Partners
+
+    this.tutorsService.findPartners()
+    .subscribe(data => {
+      this.isHidden = ""
+      this.allpartners=data.partner;
+    
+ },
+      error => {
+        this.allpartners = [];
+ 
+      },
+      () => {
+
+      }
+    ); 
+
+
    
   }
 
@@ -378,6 +403,9 @@ export class DialogAdd implements OnInit{
   public user;tutors: any[];
   public allcareers;careers;careerPositions;tutor;
   public i:number=0;
+
+  //Partners
+  public allpartners;
   
   constructor(
     public tutorsService: TutorsService,
@@ -398,6 +426,8 @@ export class DialogAdd implements OnInit{
             Validators.required]],
         position: ['', [
             Validators.required]],
+        partner: ['', [
+              Validators.required]],
         phoneNumber: ['', [
             Validators.required]],
             email: ['', [Validators.required, Validators.email]]
@@ -426,6 +456,25 @@ export class DialogAdd implements OnInit{
         this.careerPositions = [];
       }
     ); 
+
+    //Partners
+
+    this.tutorsService.findPartners()
+    .subscribe(data => {
+      this.isHidden = ""
+      this.allpartners=data.partner;
+    
+ },
+      error => {
+        this.allpartners = [];
+ 
+      },
+      () => {
+
+      }
+    ); 
+
+
    
   }
 

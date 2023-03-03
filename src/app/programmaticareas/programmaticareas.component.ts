@@ -333,6 +333,7 @@ export class DialogAdd implements OnInit{
     else{
       this.programmaticareasService.create(payLoad).subscribe(data => {
       },error=>{
+        console.log(error)
       },
       ()=>{
         this.isAdded=true;
