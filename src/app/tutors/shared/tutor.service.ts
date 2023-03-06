@@ -49,6 +49,10 @@ export class TutorsService {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/careers');
   }
 
+  findPartners() {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/v2/partners');
+  }
+
   findCareerPositions(career) {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/careers/'+career);
   }
