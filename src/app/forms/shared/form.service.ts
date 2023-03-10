@@ -59,4 +59,8 @@ else{
   update(data){
     return this.httpClient.put<any>(myGlobals.API+'/mentoring-integ/services/forms', data);
   }
+
+  findPartners() {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/v2/partners');
+  }
 }
