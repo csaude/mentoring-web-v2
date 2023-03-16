@@ -43,13 +43,6 @@
             <mat-form-field style="width: 100%;">
               <textarea rows="3"  placeholder="{{ 'description' | translate }} *" matInput maxlength="255" [(ngModel)]="data.description" formControlName="description"></textarea>
             </mat-form-field>
-
-            <mat-form-field style="width: 85%;">
-              <mat-label>{{ "partner" | translate }} *</mat-label>
-              <mat-select [(ngModel)]="data.partner" formControlName="partner" panelClass="panel-override">
-              <mat-option *ngFor="let q of allpartners" [value]="q">{{ q.name | translate }}</mat-option>
-              </mat-select>
-          </mat-form-field>
       
             <div>
               <button  mat-raised-button color="warn" (click)="onNoClick(data)">{{ "close" | translate }}</button>&nbsp;

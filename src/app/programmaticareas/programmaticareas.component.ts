@@ -27,6 +27,8 @@ export class ProgrammaticAreasComponent implements OnInit {
   public name: string;
   public code: string;
   public total: number;
+
+  
   
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
@@ -205,7 +207,7 @@ export class DialogEdit implements OnInit{
   public isHidden: string;
   public isDisabled;isAdded: boolean;
   public user;programmaticareas: any[];
-  
+ 
   constructor(
     public programmaticareasService: ProgrammaticAreasService,
     public dialogRef: MatDialogRef<DialogEdit>,
@@ -270,6 +272,9 @@ export class DialogEdit implements OnInit{
     });
   }
 
+  addLocation(data): void {
+ 
+  }
 }
 
 
