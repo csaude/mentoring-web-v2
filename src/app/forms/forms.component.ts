@@ -242,6 +242,10 @@ export class DialogEdit implements OnInit{
 
   public i:number=0;
 
+  //Partners
+
+  public allpartners;
+
   isLinear = true;
 
   public displayedColumns: string[] = ['sequence','code','applicable','question','questionType','actions'];
@@ -268,7 +272,7 @@ export class DialogEdit implements OnInit{
     public formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
     public questionsService: QuestionsService,
-    public translate: TranslateService) {
+    public translate: TranslateService ) {
 
       this.form=data;
 
@@ -300,6 +304,8 @@ export class DialogEdit implements OnInit{
       target_file: ['', [
           Validators.required]],
       description: ['', [
+              Validators.required]],
+      partner: ['', [
               Validators.required]]
     });
 
@@ -328,6 +334,16 @@ export class DialogEdit implements OnInit{
         
       }
     ); 
+
+    this.formsService.findPartners().subscribe(data => {
+      this.allpartners=data.partner;
+    },
+    error => {
+      this.allpartners=[];
+    },
+    ()=> {
+      
+    });
 
     this.formsService.findFormQuestions(this.form.id)
     .subscribe(data => {
@@ -581,6 +597,10 @@ export class DialogAdd implements OnInit{
   public user;forms: any[];
   public formtypes;programmaticAreas;form;formSearch;
 
+//Partners
+
+  public allpartners;
+
   public formQuestions;formQuestions1: any[]=[];
 
   public i:number=0;
@@ -643,7 +663,9 @@ export class DialogAdd implements OnInit{
       target_file: ['', [
           Validators.required]],
       description: ['', [
-              Validators.required]]
+              Validators.required]],
+      partner: ['', [
+                Validators.required]],
     });
 
     this.formsService.findFormTypes()
@@ -671,8 +693,22 @@ export class DialogAdd implements OnInit{
         
       }
     ); 
-
-
+        //Partners
+        this.formsService.findPartners()
+        .subscribe(data => {
+   
+          this.allpartners=data.partner;
+        
+     },
+          error => {
+            this.allpartners = [];
+     
+          },
+          () => {
+    
+          }
+        ); 
+      
     this.formQuestions = [];
    
   }

@@ -36,8 +36,8 @@
         <mat-option *ngFor="let q of allpartners" [value]="q">{{ q.name | translate }}</mat-option>
         </mat-select>
     </mat-form-field>
-
-      <mat-form-field style="width: 100%;">
+  
+    <mat-form-field style="width: 100%;">
         <mat-label>{{ "phone" | translate }} *</mat-label>
         <input type="text" matInput placeholder="{{ 'phone' | translate }}" [(ngModel)]="data.phoneNumber" formControlName="phoneNumber">
       </mat-form-field>
@@ -46,8 +46,16 @@
         <mat-label>{{ "email" | translate }} *</mat-label>
         <input type="text" matInput placeholder="{{ 'email' | translate }}" [(ngModel)]="data.email" formControlName="email">
       </mat-form-field>
-     
 
+      <mat-form-field style="width: 85%;">
+        <mat-label>{{ "location" | translate }} *</mat-label>
+        <mat-select [(ngModel)]="data.healthFacility" [compareWith]="compareObjects" formControlName="healthFacility" panelClass="panel-override">
+        <mat-option *ngFor="let q of allLocations" [value]="q">{{ q.healthFacility | translate }}</mat-option>
+        </mat-select>  
+    </mat-form-field>
+    <button mat-raised-button style="margin-left:3% ;color: rgb(0, 128, 32);"  (click)="addLocation(data)"  > ADD</button>
+   
+      <h3>O local {{healthFacility}}</h3>
 </form>  
 
 </div>
