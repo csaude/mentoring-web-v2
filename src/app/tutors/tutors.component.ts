@@ -243,7 +243,10 @@ export class DialogEdit implements OnInit{
   public i:number=0;
 
     //Partners
-    public allpartners;
+  public allpartners;
+    //Location
+  public allLocations;
+  public allLocations1; formLocaction: any[]=[];
   
   constructor(
     public tutorsService: TutorsService,
@@ -266,6 +269,8 @@ export class DialogEdit implements OnInit{
             Validators.required]],
             partner: ['', [
               Validators.required]],
+            healthFacility: ['', [
+                Validators.required]],
         phoneNumber: ['', [
             Validators.required]],
             email: ['', [Validators.required, Validators.email]]
@@ -311,10 +316,21 @@ export class DialogEdit implements OnInit{
       () => {
 
       }
-    ); 
+    );    
 
-
-   
+      //locaction
+  this.tutorsService.findHealthFacilities()
+  .subscribe(data => {
+    this.isHidden = ""
+    this.allLocations = data.healthFacility;
+  }, 
+  error => {
+    this.allLocations = [];
+  },
+    () => {
+      
+    }
+  );
   }
 
   onChange(value) {
@@ -386,6 +402,15 @@ export class DialogEdit implements OnInit{
 
     
   }
+
+  addLocation(data):void{
+     
+    var datan :any={
+      healthFacility:data.healthFacility
+    };
+
+  }
+  
 
 }
 

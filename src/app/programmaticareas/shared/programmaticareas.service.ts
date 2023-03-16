@@ -42,5 +42,4 @@ export class ProgrammaticAreasService {
     return this.httpClient.put<any>(myGlobals.API+'/mentoring-integ/services/programmaticareas', data);
   }
 
-
 }
