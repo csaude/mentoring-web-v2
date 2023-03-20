@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class TutorsService {
 
-  
+
   public url: string = myGlobals.API;
   invokeEvent: Subject<any> = new Subject();
 
@@ -53,8 +53,16 @@ export class TutorsService {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/v2/partners');
   }
 
+  findAllLocations() {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/healthfacilities');
+  }
+
   findCareerPositions(career) {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/careers/'+career);
+  }
+
+  allocateToLocation(tutor){
+    return this.httpClient.post<any>(myGlobals.API+'/mentoring-integ/services/tutors/v2/tutor-locations', tutor);
   }
 
 }

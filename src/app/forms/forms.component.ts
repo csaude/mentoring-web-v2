@@ -18,7 +18,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./forms.component.css']
 })
 
-/** 
+/**
 * @author Damasceno Lopes <damascenolopess@gmail.com>
 */
 export class FormsComponent implements OnInit {
@@ -32,13 +32,13 @@ export class FormsComponent implements OnInit {
   public programmaticarea: string;
   public total: number;
   public programmaticAreas;
-  
+
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
 
   public pageEvent: PageEvent;
   public displayedColumns: string[] = ['code','name','programmaticarea','actions'];
-     
+
   constructor(
     public excelService:ExcelService,
     public datepipe: DatePipe,
@@ -74,16 +74,16 @@ export class FormsComponent implements OnInit {
 
     this.programmaticAreasService.findProgrammaticAreas("","")
     .subscribe(data => {
-   
+
       this.programmaticAreas=data.programmaticArea;
  },
       error => {
         this.programmaticAreas = [];
       },
       () => {
-        
+
       }
-    ); 
+    );
 
   }
 
@@ -93,11 +93,11 @@ export class FormsComponent implements OnInit {
     this.isHidden = "";
     this.formsService.findForms(this.code, this.name, this.programmaticarea)
       .subscribe(data => {
-         
+
           if(data&&!data.form.length){
             this.forms1.push(data.form);
             this.forms = new MatTableDataSource(this.forms1);
-            
+
           }
           else if(data&&data.form.length){
             this.forms1=data.form;
@@ -105,12 +105,12 @@ export class FormsComponent implements OnInit {
             this.forms.sort = this.sort;
             this.forms.paginator = this.paginator;
           }
-          
+
           else{
             this.isHidden = "hide";
             this.forms = [];
             this.forms1 = [];
-          } 
+          }
       },
         error => {
           this.isHidden = "hide";
@@ -138,7 +138,7 @@ export class FormsComponent implements OnInit {
   clearCodeField(){
     this.code="";
   }
- 
+
 
   search() {
     var userValue = this.formGroup.value
@@ -162,14 +162,14 @@ export class FormsComponent implements OnInit {
     else {
       this.programmaticarea = "";
     }
-   
+
     this.getPage();
   }
 
   setQuestionEdit(uuid) {
     this.form = this.forms1.find(item => item.uuid == uuid);
     this.openDialogEdit();
-    
+
   }
 
 
@@ -178,7 +178,7 @@ export class FormsComponent implements OnInit {
     this.form.id=null;
     this.form.uuid=null;
     this.openDialogClone();
-    
+
   }
 
   printListExcel() {
@@ -192,10 +192,10 @@ export class FormsComponent implements OnInit {
       width: '1200px',
       height: '750px',
       data: this.form
-    });  
+    });
   }
 
- 
+
   openDialogClone(): void {
     window.sessionStorage.removeItem("forms");
     window.sessionStorage.setItem("forms",JSON.stringify(this.forms1));
@@ -205,7 +205,7 @@ export class FormsComponent implements OnInit {
       width: '1200px',
       height: '750px',
       data: this.form
-    }); 
+    });
   }
 
   openDialogNew(): void {
@@ -217,10 +217,10 @@ export class FormsComponent implements OnInit {
       width: '1200px',
       height: '750px',
       data: new Form()
-    }); 
+    });
   }
 
-  
+
 }
 
 
@@ -241,6 +241,8 @@ export class DialogEdit implements OnInit{
   public formQuestions;formQuestions1: any[]=[];
 
   public i:number=0;
+
+  public allpartners;
 
   isLinear = true;
 
@@ -286,7 +288,7 @@ export class DialogEdit implements OnInit{
       code: [],
       type: []
     });
-    
+
 
     this.formGroup = this.formBuilder.group({
       name: ['', [
@@ -300,34 +302,46 @@ export class DialogEdit implements OnInit{
       target_file: ['', [
           Validators.required]],
       description: ['', [
+              Validators.required]],
+      partner: ['', [
               Validators.required]]
     });
 
     this.formsService.findFormTypes()
     .subscribe(data => {
-     
+
       this.formtypes=data.formType;
  },
       error => {
         this.formtypes = [];
-        
+
       },
       () => {
       }
-    ); 
+    );
 
     this.programmaticAreasService.findProgrammaticAreas("","")
     .subscribe(data => {
-   
+
       this.programmaticAreas=data.programmaticArea;
  },
       error => {
         this.programmaticAreas = [];
       },
       () => {
-        
+
       }
-    ); 
+    );
+
+    this.formsService.findPartners().subscribe(data => {
+      this.allpartners=data.partner;
+    },
+    error => {
+      this.allpartners=[];
+    },
+    ()=> {
+
+    });
 
     this.formsService.findFormQuestions(this.form.id)
     .subscribe(data => {
@@ -343,13 +357,13 @@ export class DialogEdit implements OnInit{
         }
         this.formQuestions1=newFQ;
         this.formQuestions = new MatTableDataSource(this.formQuestions1);
-        
-        
+
+
       }
       else if(data&&data.formQuestion.length){
         this.formQuestions1=data.formQuestion;
         this.formQuestions1=alasql("SELECT * FROM ?formQuestions1 ORDER BY CAST(sequence AS NUMBER) ASC",[this.formQuestions1]);
-        
+
         var newFQ=[];
         var  i=1;
         for( let f of this.formQuestions1){
@@ -361,12 +375,12 @@ export class DialogEdit implements OnInit{
         this.formQuestions = new MatTableDataSource(this.formQuestions1);
 
       }
-      
+
       else{
         this.isHidden = "hide";
         this.formQuestions = [];
         this.formQuestions1 = [];
-      } 
+      }
  },
       error => {
         this.formQuestions = [];
@@ -375,8 +389,8 @@ export class DialogEdit implements OnInit{
       () => {
         this.isHidden = "hide";
            }
-    ); 
-   
+    );
+
   }
 
   search() {
@@ -394,13 +408,13 @@ export class DialogEdit implements OnInit{
     else {
       this.code = "";
     }
-   
+
     if (userValue.type) {
       this.type = userValue.type;
     } else {
       this.type = "";
     }
-   
+
     this.getPage();
   }
 
@@ -410,11 +424,11 @@ export class DialogEdit implements OnInit{
     this.isHidden2 = "";
     this.questionsService.findQuestions(this.code, this.name, this.type)
       .subscribe(data => {
-         
+
           if(data&&!data.question.length){
             this.questions1.push(data.question);
             this.questions = new MatTableDataSource(this.questions1);
-            
+
           }
           else if(data&&data.question.length){
             this.questions1=data.question;
@@ -422,12 +436,12 @@ export class DialogEdit implements OnInit{
             this.questions.sort = this.sort;
             this.questions.paginator = this.paginator;
           }
-          
+
           else{
             this.isHidden2 = "hide";
             this.questions = [];
             this.questions1 = [];
-          } 
+          }
       },
         error => {
           this.isHidden2 = "hide";
@@ -439,7 +453,7 @@ export class DialogEdit implements OnInit{
         }
       );
   }
-  
+
 
   compareObjects1(o1: any, o2: any) {
     if(o1==o2 )
@@ -448,7 +462,7 @@ export class DialogEdit implements OnInit{
   }
 
   generateArray():any{
-    return Array.from({length: this.formQuestions1.length}, (v, k) => k+1).map(String); 
+    return Array.from({length: this.formQuestions1.length}, (v, k) => k+1).map(String);
   }
 
   compareObjects2(o1: any, o2: any) {
@@ -459,12 +473,12 @@ export class DialogEdit implements OnInit{
 
   onNoClick(data): void {
     this.dialogRef.close();
-    
+
       if(this.isAdded==true){
         this.formsService.callMethodUpdateOfComponent();
       }
       else{
-  
+
       }
 
   }
@@ -520,7 +534,7 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
     this.formQuestions1=alasql("SELECT * FROM ?formQuestions1 ORDER BY CAST(sequence AS NUMBER) ASC",[this.formQuestions1]);
 
     this.formQuestions = new MatTableDataSource(this.formQuestions1);
-  
+
   }
 
   onChangeApplicable(data):void{
@@ -549,12 +563,12 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
         this.formsService.callMethodUpdateOfComponent();
         this.openSnackBar("O Formulário com o código "+data.code+" foi actualizado com sucesso!", "OK");
       }
-      
+
       );
 
     }
 
-    
+
   }
 
   openSnackBar(message: string, action: string) {
@@ -562,7 +576,7 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
       duration: 4000,
     });
 
-    
+
   }
 
 }
@@ -584,6 +598,8 @@ export class DialogAdd implements OnInit{
   public formQuestions;formQuestions1: any[]=[];
 
   public i:number=0;
+
+  public allpartners;
 
   isLinear = true;
 
@@ -629,7 +645,7 @@ export class DialogAdd implements OnInit{
       code: [],
       type: []
     });
-    
+
 
     this.formGroup = this.formBuilder.group({
       name: ['', [
@@ -643,38 +659,55 @@ export class DialogAdd implements OnInit{
       target_file: ['', [
           Validators.required]],
       description: ['', [
-              Validators.required]]
+              Validators.required]],
+      partner: ['', [
+                Validators.required]]
     });
 
     this.formsService.findFormTypes()
     .subscribe(data => {
-     
+
       this.formtypes=data.formType;
  },
       error => {
         this.formtypes = [];
-        
+
       },
       () => {
       }
-    ); 
+    );
 
     this.programmaticAreasService.findProgrammaticAreas("","")
     .subscribe(data => {
-   
+
       this.programmaticAreas=data.programmaticArea;
  },
       error => {
         this.programmaticAreas = [];
       },
       () => {
-        
+
       }
-    ); 
+    );
+
+    this.formsService.findPartners()
+        .subscribe(data => {
+
+          this.allpartners=data.partner;
+
+     },
+          error => {
+            this.allpartners = [];
+
+          },
+          () => {
+
+          }
+        );
 
 
     this.formQuestions = [];
-   
+
   }
 
   search() {
@@ -692,13 +725,13 @@ export class DialogAdd implements OnInit{
     else {
       this.code = "";
     }
-   
+
     if (userValue.type) {
       this.type = userValue.type;
     } else {
       this.type = "";
     }
-   
+
     this.getPage();
   }
 
@@ -708,11 +741,11 @@ export class DialogAdd implements OnInit{
     this.isHidden2 = "";
     this.questionsService.findQuestions(this.code, this.name, this.type)
       .subscribe(data => {
-         
+
           if(data&&!data.question.length){
             this.questions1.push(data.question);
             this.questions = new MatTableDataSource(this.questions1);
-            
+
           }
           else if(data&&data.question.length){
             this.questions1=data.question;
@@ -720,12 +753,12 @@ export class DialogAdd implements OnInit{
             this.questions.sort = this.sort;
             this.questions.paginator = this.paginator;
           }
-          
+
           else{
             this.isHidden2 = "hide";
             this.questions = [];
             this.questions1 = [];
-          } 
+          }
       },
         error => {
           this.isHidden2 = "hide";
@@ -739,17 +772,17 @@ export class DialogAdd implements OnInit{
   }
 
   generateArray():any{
-    return Array.from({length: this.formQuestions1.length}, (v, k) => k+1).map(String); 
+    return Array.from({length: this.formQuestions1.length}, (v, k) => k+1).map(String);
   }
 
   onNoClick(data): void {
     this.dialogRef.close();
-    
+
       if(this.isAdded==true){
         this.formsService.callMethodUpdateOfComponent();
       }
       else{
-  
+
       }
 
   }
@@ -805,7 +838,7 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
     this.formQuestions1=alasql("SELECT * FROM ?formQuestions1 ORDER BY CAST(sequence AS NUMBER) ASC",[this.formQuestions1]);
 
     this.formQuestions = new MatTableDataSource(this.formQuestions1);
-  
+
   }
 
   onChangeApplicable(data):void{
@@ -834,12 +867,12 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
         this.formsService.callMethodUpdateOfComponent();
         this.openSnackBar("O Formulário foi criado com sucesso!", "OK");
       }
-      
+
       );
 
     }
 
-    
+
   }
 
   openSnackBar(message: string, action: string) {
@@ -847,7 +880,7 @@ if(this.formQuestions1.find(item => item.question.uuid==data.uuid)){
       duration: 4000,
     });
 
-    
+
   }
 
 }

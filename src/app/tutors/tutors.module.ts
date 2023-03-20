@@ -34,6 +34,7 @@ import {MatNativeDateModule} from '@angular/material';
 import {DialogEdit } from './tutors.component';
 import {DialogPAEdit } from './tutors.component';
 import {DialogAdd } from './tutors.component';
+import { DialogLocationEdit } from './tutors.component';
 
 @NgModule({
   imports: [
@@ -41,7 +42,7 @@ import {DialogAdd } from './tutors.component';
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-   
+
     TranslateModule,
     MatTableModule,
     MatSortModule,
@@ -69,7 +70,8 @@ import {DialogAdd } from './tutors.component';
     TutorsComponent,
     DialogEdit,
     DialogPAEdit,
-    DialogAdd
+    DialogAdd,
+    DialogLocationEdit
   ],
   exports: [
     TutorsComponent
@@ -81,11 +83,12 @@ import {DialogAdd } from './tutors.component';
   entryComponents:[
     DialogEdit,
     DialogPAEdit,
-    DialogAdd
+    DialogAdd,
+    DialogLocationEdit
   ]
 })
 
-/** 
+/**
 * @author damasceno.lopes
 */
 export class TutorsModule { }

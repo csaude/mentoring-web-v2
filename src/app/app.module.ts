@@ -31,7 +31,7 @@ import { reportsRouting } from "./reports/reports.routing";
 /** Services*/
 import { NavbarService } from "././nav-bar/nav-bar.service";
 import { ResourcesModule } from "./resources/resources.module";
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { TranslateModule } from "ng2-translate";
 
 /** Fix 404 error on page refresh */
@@ -48,7 +48,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     BrowserAnimationsModule,
     ProgrammaticAreasModule,
     QuestionsModule,
-    TutoredsModule, 
+    TutoredsModule,
     questionsRouting,
     homesRouting,
     loginsRouting,
@@ -58,7 +58,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     formsRouting,
     reportsRouting,
     routing,
-    
+
 
     HttpClientModule,
     ResourcesModule,
@@ -68,6 +68,10 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     TutorsModule,
     FormssModule,
     ReportsModule,
+    HttpClientXsrfModule.withOptions({
+      cookieName: 'XSRF-TOKEN',
+      headerName: 'X-CSRF-TOKEN'
+    }),
 
     TranslateModule.forRoot()
 
