@@ -1,5 +1,5 @@
 //
-// ===== File globals.ts    
+// ===== File globals.ts
 'use strict';
 
 //Mmentoring-api

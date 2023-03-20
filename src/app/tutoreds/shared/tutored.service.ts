@@ -10,7 +10,7 @@ import { Subject } from 'rxjs';
 @Injectable()
 export class TutoredsService {
 
-  
+
   public url: string = myGlobals.API;
   invokeEvent: Subject<any> = new Subject();
 
