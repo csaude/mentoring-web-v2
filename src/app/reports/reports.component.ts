@@ -8,6 +8,7 @@ import * as alasql from 'alasql';
 import { TranslateService } from 'ng2-translate';
 
 import { DatePipe } from '@angular/common';
+import { TutorsService } from '../tutors/shared/tutor.service';
 
 @Component({
   selector: 'app-reports',
@@ -20,7 +21,7 @@ import { DatePipe } from '@angular/common';
 */
 export class ReportsComponent implements OnInit {
   public report: Report = new Report();
-  public isHidden: string;
+  public isHidden; isHidden2: string;
   public reports;reports1: any[]=[];
   public ROLE_HIS;
   public form: FormGroup;
@@ -29,6 +30,8 @@ export class ReportsComponent implements OnInit {
   public surname: string;
   public phone: string;
   public total: number;
+  public partner;
+  public user;
 
   public isClosed;samples;analyse;sessions;sessionslist;hts;narrative;indicators;indicatorslist;pmqtr;narrativeCOP20;pmqtrlist: boolean;
 
@@ -64,7 +67,8 @@ export class ReportsComponent implements OnInit {
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    public translate: TranslateService) {
+    public translate: TranslateService,
+    public tutorsService: TutorsService) {
     this.form = formBuilder.group({
       from: [],
       until: [],
@@ -102,7 +106,25 @@ export class ReportsComponent implements OnInit {
     this.indicatorslist = false;
     this.pmqtr=false;
     this.pmqtrlist=false;
+    this.user = JSON.parse(window.sessionStorage.getItem('user'));
 
+    this.tutorsService.findTutoresByUuid(this.user.uuid)
+    .subscribe(
+      data => {
+        this.partner = data.partner;
+        if(this.partner.name === "FGH"){
+          this.isHidden2 = "hide";
+        }else {
+          this.isHidden2 = "";
+        }
+      },
+      error => {
+        this.partner = '';
+      },
+      () => {
+
+      }
+    );
 
   }
 
