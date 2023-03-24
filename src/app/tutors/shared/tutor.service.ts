@@ -65,4 +65,8 @@ export class TutorsService {
     return this.httpClient.post<any>(myGlobals.API+'/mentoring-integ/services/tutors/v2/tutor-locations', tutor);
   }
 
+  findTutoresByUuid(uuid){
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors/'+uuid);
+  }
+  
 }

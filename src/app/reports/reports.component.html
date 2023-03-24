@@ -16,31 +16,31 @@
               <mat-icon>file_download</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "download" | translate }}</span>
           </a>
 
-          <mat-toolbar>
-              <mat-toolbar-row>
-                  <span>{{ "reports" | translate }}</span>
-              </mat-toolbar-row>
-          </mat-toolbar>
-<!--
-          <a mat-list-item (click)="getSamples()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_samples" | translate }}</span>
-          </a>
+            <mat-toolbar>
+                <mat-toolbar-row>
+                    <span>{{ "reports" | translate }}</span>
+                </mat-toolbar-row>
+            </mat-toolbar>
+<div *ngIf="isHidden2=='hide'">
+            <a mat-list-item (click)="getSamples()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_samples" | translate }}</span>
+            </a>
 
-          <a mat-list-item (click)="getAnalyse()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_analyses" | translate }}</span>
-          </a>
--->
-          <a mat-list-item (click)="getSessions()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessions" | translate }}</span>
-          </a>
+            <a mat-list-item (click)="getAnalyse()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_analyses" | translate }}</span>
+            </a>
+</div>
+            <a mat-list-item (click)="getSessions()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessions" | translate }}</span>
+            </a>
 
-          <a mat-list-item (click)="getSessionsList()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessionslist" | translate }}</span>
-          </a>
-<!--
-          <a mat-list-item (click)="getHTS()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_hts" | translate }}</span>
-          </a>
+            <a mat-list-item (click)="getSessionsList()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_sessionslist" | translate }}</span>
+            </a>
+<div *ngIf="isHidden2=='hide'" >
+            <a mat-list-item (click)="getHTS()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_hts" | translate }}</span>
+            </a>
 
           <a mat-list-item (click)="getNarrative()">
               <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_narrative" | translate }}</span>
@@ -58,19 +58,19 @@
               <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_indicators_list" | translate }}</span>
           </a>
 
-          <a mat-list-item (click)="getIndicatorsPMQTR()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_pmqtr" | translate }}</span>
-          </a>
+            <a mat-list-item (click)="getIndicatorsPMQTR()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_pmqtr" | translate }}</span>
+            </a>
+        
+            <a mat-list-item (click)="getPMQTRList()">
+                <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_pmqtr_list" | translate }}</span>
+            </a>
+        </div>
 
-          <a mat-list-item (click)="getPMQTRList()">
-              <mat-icon>assessment</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "report_pmqtr_list" | translate }}</span>
-          </a>
-      -->
+        </mat-nav-list>
 
-      </mat-nav-list>
-
-  </mat-sidenav>
-  <mat-sidenav-content style="padding: 10px; margin-top: 75px;">
+    </mat-sidenav>
+    <mat-sidenav-content style="padding: 10px; margin-top: 75px;">
 
       <span style="display: inline-flex;">
       <button mat-mini-fab color="basic" (click)="drawer.toggle()" (click)="changeIcon()" matTooltip="Esconder / Mostrar menu laterals"><mat-icon>{{icon}}</mat-icon> </button>

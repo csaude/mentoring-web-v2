@@ -3,6 +3,8 @@ import { Component, OnInit,ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { NavbarService } from './nav-bar.service';
 import { TranslateService } from 'ng2-translate';
+import { TutorsService } from '../tutors/shared/tutor.service';
+import { Tutor } from '../tutors/shared/tutor';
 
 @Component({
   selector: 'app-nav-bar',
@@ -18,12 +20,15 @@ export class NavBarComponent implements OnInit {
 
   public user;ROLE_HIS;firstName;lastName;
   public showNavBar: boolean = false;
+  public partner ;
+  public isHidden: String;
    
   constructor(
     public router: Router,
     public route: ActivatedRoute,
     public nav: NavbarService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    public tutorsService: TutorsService
   ) {
 
     translate.addLangs(['pt', 'en']);
@@ -46,6 +51,23 @@ export class NavBarComponent implements OnInit {
     if (window.localStorage.getItem('mentoring_locale')) {
       this.translate.use(window.localStorage.getItem('mentoring_locale'));
     }
+
+    this.tutorsService.findTutoresByUuid(this.user.uuid)
+    .subscribe(data => {
+      this.partner = data.partner;
+      if(this.partner.name === "FGH"){
+        this.isHidden = "hide";
+      }else{
+        this.isHidden = "";
+      }
+    },
+    error => {
+      this.partner = '';
+    },
+    () => {
+
+    }
+    );
 
   }
   
