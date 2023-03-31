@@ -23,7 +23,8 @@ import { DatePipe } from '@angular/common';
 export class TutorsComponent implements OnInit {
   public tutor: Tutor = new Tutor();
   public isHidden: string;
-  public tutors;tutors1: any[]=[];
+  public tutors;tutors1 : any[]=[];
+  public tutors2 : any []=[];
   public ROLE_HIS;
   public form: FormGroup;
   public name: string;
@@ -31,6 +32,8 @@ export class TutorsComponent implements OnInit {
   public surname: string;
   public phone: string;
   public total: number;
+  public user;
+  public partner;
 
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
@@ -73,26 +76,55 @@ export class TutorsComponent implements OnInit {
     this.code = "";
     this.phone = "";
     this.surname = "";
+    this.user = JSON.parse(window.sessionStorage.getItem('user'));
 
   }
 
   getPage() {
+
+    this.tutorsService.findTutoresByUuid(this.user.uuid)
+    .subscribe(data => {
+      this.partner = data.partner;
+            },
+           error =>{
+    this.partner = {}
+          },
+  () => {
+
+        });
+
     this.tutors = [];
     this.tutors1 = [];
+    this.tutors2 = [];
     this.isHidden = "";
     this.tutorsService.findTutors(this.code, this.name, this.surname, this.phone)
       .subscribe(data => {
 
           if(data&&!data.tutor.length){
-            this.tutors1.push(data.tutor);
-            this.tutors = new MatTableDataSource(this.tutors1);
 
+           this.tutors2 = data.tutor;
+            for(let tutor of this.tutors2){
+              if(tutor.partner.name === this.partner.name){
+                  this.tutors1.push(tutor);
+                  this.tutors = new MatTableDataSource(this.tutors1);
+              }
+            }
+           
+          
           }
           else if(data&&data.tutor.length){
-            this.tutors1=data.tutor;
+            
+          this.tutors2 = data.tutor;
+          for(let tutor of this.tutors2){
+            if(tutor.partner.name === this.partner.name){
+                this.tutors1.push(tutor);
+      
+            }
+          }
             this.tutors = new MatTableDataSource(this.tutors1);
             this.tutors.sort = this.sort;
             this.tutors.paginator = this.paginator;
+            
           }
 
           else{
