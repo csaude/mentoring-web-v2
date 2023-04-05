@@ -33,6 +33,15 @@ export class TutorsService {
   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors', {params});
   }
 
+  findTutorsForPartner(code, name, surname, phone, partnerUuid) {
+    const params = new HttpParams()
+    .set('code', code)
+    .set('name', name)
+    .set('surname', surname)
+    .set('partnerUuid', partnerUuid);
+   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors/tutor-partner', {params});
+   }
+
   create(data){
     return this.httpClient.post<any>(myGlobals.API+'/mentoring-integ/services/tutors', data);
   }
