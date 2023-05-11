@@ -22,6 +22,7 @@ export class NavBarComponent implements OnInit {
   public showNavBar: boolean = false;
   public partner ;
   public isHidden: String;
+  public isAdmin: boolean;
    
   constructor(
     public router: Router,
@@ -55,6 +56,7 @@ export class NavBarComponent implements OnInit {
     this.tutorsService.findTutoresByUuid(this.user.uuid)
     .subscribe(data => {
       this.partner = data.partner;
+      this.isAdmin = data.isAdmin;
       if(this.partner.name === "FGH"){
         this.isHidden = "hide";
       }else{

@@ -309,7 +309,8 @@ export class DialogEdit implements OnInit{
         location: [''],
         phoneNumber: ['', [
             Validators.required]],
-            email: ['', [Validators.required, Validators.email]]
+            email: ['', [Validators.required, Validators.email]],
+            isAdmin: ['', [Validators.required]]
       });
 
     }
@@ -484,7 +485,8 @@ export class DialogAdd implements OnInit{
               Validators.required]],
         phoneNumber: ['', [
             Validators.required]],
-            email: ['', [Validators.required, Validators.email]]
+            email: ['', [Validators.required, Validators.email]],
+        isAdmin: ['', [Validators.required]]
       });
 
     }
@@ -584,7 +586,7 @@ export class DialogAdd implements OnInit{
         this.isDisabled=false;
       },
       ()=>{
-        this.isDisabled=false;
+       
         this.isAdded=true;
         this.openSnackBar("O Tutor foi cadastrado com sucesso!", "OK");
       }

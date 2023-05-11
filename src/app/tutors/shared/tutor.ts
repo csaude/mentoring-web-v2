@@ -18,5 +18,6 @@ export class Tutor {
     surname: string;
     phoneNumber: string;
     email: string;
-    userContext:[]=[]
+    userContext:[]=[];
+    isAdmin: boolean;
 }
