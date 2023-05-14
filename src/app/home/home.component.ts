@@ -14,7 +14,7 @@ import {ExcelService} from '../resources/shared/excel.service';
   styleUrls: ['./home.component.css']
 })
 
-/** 
+/**
 * @author Damasceno Lopes <damascenolopess@gmail.com>
 */
 export class HomeComponent implements OnInit {
@@ -63,7 +63,7 @@ public total;
         stacked:true
       }]
     }
-    
+
   };
 
   //Chart3
@@ -109,15 +109,16 @@ public total;
     public datepipe: DatePipe
   ){
 
-    
+
   }
 
 
-  
+
   ngOnInit() {
 
+    var user = JSON.parse(window.sessionStorage.getItem('user'));
 
-    this.tutoredService.findSubmitedSessions()
+    this.tutoredService.findSubmitedSessions(user.uuid)
     .subscribe(data => {
       this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
       this.chartSS1 = data.submitedSessions;
@@ -130,7 +131,7 @@ public total;
   ()=>{
 
     this.chart2=true;
-   
+
     var label: string[] = [];
     var value: number[] = [];
 
@@ -139,7 +140,7 @@ public total;
         value.push(l.totalSubmited);
       }
 
-      
+
       this.barChartLabels = label;
       this.barChartData = [
         { data: value, label: "Sessões" }];
@@ -148,38 +149,38 @@ public total;
     });
 
 
-    this.tutoredService.findSubmitedSessionsLast12Months()
+    this.tutoredService.findSubmitedSessionsLast12Months(user.uuid)
     .subscribe(data => {
       this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[data.performedSession]);
 
       var label: string[] = [];
       var value: number[] = [];
-     
+
       for (let l of this.chartSS12) {
         label.push(l.district);
         value.push(+l.totalPerformed);
-  
+
       }
       this.lineChartLabels = label;
       this.lineChartData = [
         { data: value, label: "Sessões submetidas" }];
-     
-    
-     
+
+
+
     },error=>{},
   ()=>{
 
-   
+
 
     this.chart3=true;
   });
-    
+
   }
 
   download(){
     this.excelService.exportAsExcelFile(this.chartSS1, 'Sistema de Tutoria, Sessões de Tutoria ' + this.datepipe.transform(new Date(), 'dd-MM-yyyy HHmm'));
   }
-   
+
 
 }
 
@@ -193,8 +194,8 @@ public total;
 
 
 
-   
 
-  
+
+
 
 

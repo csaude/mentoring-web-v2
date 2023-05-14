@@ -50,12 +50,12 @@ export class TutoredsService {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/careers/'+career);
   }
 
-  findSubmitedSessions() {
-    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/sessions');
+  findSubmitedSessions(userUUID) {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/sessions/'+userUUID);
   }
 
-  findSubmitedSessionsLast12Months() {
-    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-months');
+  findSubmitedSessionsLast12Months(userUUID) {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/mentorships/performed-sessions-months/'+userUUID);
   }
 
 }
