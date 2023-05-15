@@ -24,19 +24,17 @@
               <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "reports" | translate }}</h3>
 
             </a>
-           <div *ngIf="isHidden==='hide'">
             <a routerLink="/tutoreds"  class="mentoringMenu" mat-menu-item style="display: inline-block; width: 130px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
 
                 <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-tutored.png" /></span>
                 <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "tutoreds" | translate }}</h3>
 
             </a>
-          </div>          
-
+                 
           </div>
 
           <div *ngIf="isAdmin==='true'" style="display: flex; ">
-            <div *ngIf="isHidden=='hide'" >
+      
               <a routerLink="/programmaticareas" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
   
                   <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-programmatic.png" /></span>
@@ -59,10 +57,8 @@
   
               </a>
             </div>
-            </div>
 
             <div *ngIf="isAdmin==='true'" style="display: flex;">
-              <div *ngIf="isHidden=='hide'" >
                 <a  routerLink="/forms" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
     
                     <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-form.png" /></span>
@@ -76,7 +72,6 @@
                     <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "locations" | translate }}</h3>
     
                 </a>
-              </div>
                 <a  routerLink="/tutors" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
     
                     <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-user.png" /></span>
