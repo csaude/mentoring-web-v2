@@ -1,8 +1,8 @@
 {
   "/mentoring-integ/*": {
-    "target": "https://mentdev.fgh.org.mz",
+    "target": "http://localhost:8080",
       "secure": false,
-      "logLevel": "debug" 
+      "logLevel": "debug"
   },
   "/account-manager-web/*": {
       "target": "https://mentdev.fgh.org.mz",
