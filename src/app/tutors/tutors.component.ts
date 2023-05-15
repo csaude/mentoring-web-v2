@@ -31,6 +31,9 @@ export class TutorsComponent implements OnInit {
   public surname: string;
   public phone: string;
   public total: number;
+  public user;
+  public partner;
+
 
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
@@ -73,14 +76,27 @@ export class TutorsComponent implements OnInit {
     this.code = "";
     this.phone = "";
     this.surname = "";
+    this.user = JSON.parse(window.sessionStorage.getItem('user'));
 
+    this.tutorsService.findTutoresByUuid(this.user.uuid)
+    .subscribe(data => {
+      this.partner = data.partner;
+            },
+           error =>{
+    this.partner = {}
+          },
+         () => {
+
+        });
   }
 
   getPage() {
+
     this.tutors = [];
     this.tutors1 = [];
     this.isHidden = "";
-    this.tutorsService.findTutors(this.code, this.name, this.surname, this.phone)
+
+    this.tutorsService.findTutorsForPartner(this.code, this.name, this.surname, this.phone, this.partner.uuid)
       .subscribe(data => {
 
           if(data&&!data.tutor.length){
@@ -111,6 +127,8 @@ export class TutorsComponent implements OnInit {
           this.isHidden = "hide";
         }
       );
+
+
   }
 
 
@@ -153,6 +171,7 @@ export class TutorsComponent implements OnInit {
     else {
       this.code = "";
     }
+
 
     this.getPage();
   }
@@ -290,7 +309,8 @@ export class DialogEdit implements OnInit{
         location: [''],
         phoneNumber: ['', [
             Validators.required]],
-            email: ['', [Validators.required, Validators.email]]
+            email: ['', [Validators.required, Validators.email]],
+            isAdmin: ['', [Validators.required]]
       });
 
     }
@@ -465,7 +485,8 @@ export class DialogAdd implements OnInit{
               Validators.required]],
         phoneNumber: ['', [
             Validators.required]],
-            email: ['', [Validators.required, Validators.email]]
+            email: ['', [Validators.required, Validators.email]],
+        isAdmin: ['', [Validators.required]]
       });
 
     }
@@ -565,7 +586,7 @@ export class DialogAdd implements OnInit{
         this.isDisabled=false;
       },
       ()=>{
-        this.isDisabled=false;
+       
         this.isAdded=true;
         this.openSnackBar("O Tutor foi cadastrado com sucesso!", "OK");
       }
