@@ -45,6 +45,10 @@
         <input type="text" matInput placeholder="{{ 'email' | translate }}" [(ngModel)]="data.email" formControlName="email">
       </mat-form-field>
 
+      <mat-label>{{"admin" | translate }}
+        <input type="checkbox" [(ngModel)]="data.isAdmin" formControlName="isAdmin">
+       </mat-label>
+
 </form>
 
 </div>
