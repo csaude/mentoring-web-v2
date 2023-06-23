@@ -8,6 +8,7 @@ import * as alasql from 'alasql';
 import { TranslateService } from 'ng2-translate';
 
 import { DatePipe } from '@angular/common';
+import { TutorsService } from '../tutors/shared/tutor.service';
 
 @Component({
   selector: 'app-tutoreds',
@@ -29,6 +30,8 @@ export class TutoredsComponent implements OnInit {
   public surname: string;
   public phone: string;
   public total: number;
+  public user;
+  public tutorId;
   
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
@@ -43,7 +46,8 @@ export class TutoredsComponent implements OnInit {
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    public translate: TranslateService) {
+    public translate: TranslateService,
+    public tutorsService: TutorsService) {
     this.form = formBuilder.group({
       name: [],
       surname: [],
@@ -70,14 +74,14 @@ export class TutoredsComponent implements OnInit {
     this.code = "";
     this.phone = "";
     this.surname = "";
-
+    this.getTutorId();
   }
 
   getPage() {
     this.tutoreds = [];
     this.tutoreds1 = [];
     this.isHidden = "";
-    this.tutoredsService.findTutoreds(this.code, this.name, this.surname, this.phone)
+    this.tutoredsService.findTutoredsByTutor(this.tutorId, this.code, this.name, this.surname, this.phone)
       .subscribe(data => {
          
           if(data&&!data.tutored.length){
@@ -110,6 +114,22 @@ export class TutoredsComponent implements OnInit {
       );
   }
 
+  getTutorId(){
+
+    this.user = JSON.parse(window.sessionStorage.getItem('user'));
+
+    this.tutorsService.findTutoresByUuid(this.user.uuid)
+    .subscribe(data => {
+      this.tutorId = data.id;
+            },
+           error =>{
+            this.tutorId = {}
+          },
+         () => {
+
+        });
+
+  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -150,8 +170,7 @@ export class TutoredsComponent implements OnInit {
     else {
       this.code = "";
     }
-   
-    this.getPage();
+    this.getPage()
   }
 
   setQuestionEdit(uuid) {

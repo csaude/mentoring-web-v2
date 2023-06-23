@@ -34,6 +34,16 @@ export class TutoredsService {
   return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutoreds', {params});
   }
 
+  findTutoredsByTutor(tutorid, code, name, surname, phone) {
+    const params = new HttpParams()
+    .set('tutorId', tutorid)
+    .set('code', code)
+    .set('name', name)
+    .set('surname', surname)
+    .set('phoneNumber', phone);
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutoreds/tutor', {params});
+  }
+
   create(data){
     return this.httpClient.post<any>(myGlobals.API+'/mentoring-integ/services/tutoreds', data);
   }
