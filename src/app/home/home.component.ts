@@ -120,19 +120,26 @@ public total;
 
     this.tutoredService.findSubmitedSessions(user.uuid)
     .subscribe(data => {
-      this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
-      this.chartSS1 = data.submitedSessions;
-      this.total=this.chartSS1.length;
-      this.sessions = new MatTableDataSource(this.chartSS1);
-      this.sessions.sort = this.sort;
-      this.sessions.paginator = this.paginator;
+      if (data !== null) {
+        this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
+        this.chartSS1 = data.submitedSessions;
+        this.total=this.chartSS1.length;
+        this.sessions = new MatTableDataSource(this.chartSS1);
+        this.sessions.sort = this.sort;
+        this.sessions.paginator = this.paginator;
+      }
+
 
     },error=>{},
   ()=>{
 
-    this.chart2=true;
+    console.log(this.chartSS);
 
-    var label: string[] = [];
+    if (this.chartSS === undefined || this.chartSS === null) {
+      this.chart2=false;
+    } else {
+      this.chart2=true;
+      var label: string[] = [];
     var value: number[] = [];
 
       for (let l of this.chartSS) {
@@ -146,33 +153,42 @@ public total;
         { data: value, label: "Sessões" }];
 
         this.chart1=true;
+    }
     });
 
 
     this.tutoredService.findSubmitedSessionsLast12Months(user.uuid)
     .subscribe(data => {
-      this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[data.performedSession]);
+      console.log(data)
+      if (data !== null) {
+        this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[data.performedSession]);
 
-      var label: string[] = [];
-      var value: number[] = [];
+        var label: string[] = [];
+        var value: number[] = [];
 
-      for (let l of this.chartSS12) {
-        label.push(l.district);
-        value.push(+l.totalPerformed);
+        for (let l of this.chartSS12) {
+          label.push(l.district);
+          value.push(+l.totalPerformed);
+
+        }
+        this.lineChartLabels = label;
+        this.lineChartData = [
+          { data: value, label: "Sessões submetidas" }];
 
       }
-      this.lineChartLabels = label;
-      this.lineChartData = [
-        { data: value, label: "Sessões submetidas" }];
 
 
 
     },error=>{},
   ()=>{
 
+    console.log(this.lineChartData);
 
-
-    this.chart3=true;
+    if (this.lineChartData.length <= 0) {
+      this.chart3=false;
+    } else {
+      this.chart3=true;
+    }
   });
 
   }

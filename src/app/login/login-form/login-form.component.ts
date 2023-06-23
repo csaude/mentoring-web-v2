@@ -6,6 +6,7 @@ import { User } from '../../users/shared/user';
 import { MatPaginator,MatDialog, MatDialogRef, MatSort , MatTableDataSource, MAT_DIALOG_DATA, PageEvent } from '@angular/material';
 import { NavbarService } from '../../nav-bar/nav-bar.service';
 import { MatSnackBar} from '@angular/material';
+import { TutorsService } from 'src/app/tutors/shared/tutor.service';
 
 @Component({
   selector: 'app-login-form',
@@ -13,7 +14,7 @@ import { MatSnackBar} from '@angular/material';
   styleUrls: ['./login-form.component.css']
 })
 
-/** 
+/**
 * @author damasceno.lopes
 */
 export class LoginFormComponent implements OnInit {
@@ -24,9 +25,10 @@ export class LoginFormComponent implements OnInit {
   public isDisabled: boolean;
   public localUser = { username: '', password: '' };
 
-   
+
   constructor(
     formBuilder: FormBuilder,
+    public tutorService: TutorsService,
     public router: Router,
     public route: ActivatedRoute,
     public loginsService: LoginsService,
@@ -68,9 +70,15 @@ export class LoginFormComponent implements OnInit {
         this.user = data;
         if (this.user) {
           if (this.user.accountNonExpired == "true"||this.user.accountNonLocked == "true"||this.user.accountNonExpired == "true"||this.user.credentialsNonExpired == "true"||this.user.enabled == "true") {
-            window.sessionStorage.setItem('user', JSON.stringify(this.user));
-            this.router.navigate(['home']);
-            this.nav.callMethodOfSecondComponent();
+            this.tutorService.findTutoresByUuid(this.user.uuid)
+            .subscribe(data => {
+              this.user.isAdmin = data.isAdmin;
+              window.sessionStorage.setItem('user', JSON.stringify(this.user));
+              window.sessionStorage.setItem('curTutor', JSON.stringify(data));
+              this.router.navigate(['home']);
+              this.nav.callMethodOfSecondComponent();
+            },error=>{},
+            ()=>{});
           } else {
             this.openSnackBar("Acesso restrito, contacte o SIS sis@fgh.org.mz!", "OK");
             this.loginAccess = "";
@@ -96,13 +104,13 @@ export class LoginFormComponent implements OnInit {
 
 
 resetPass(): void {
-  
+
   const dialogRef = this.dialog.open(DialogResetPass, {
     disableClose:true,
     width: '800px',
     height: '300px',
     data: null
-}); 
+});
 
 }
 
@@ -121,7 +129,7 @@ export class DialogResetPass implements OnInit{
   public isDisabled;isAdded: boolean;
   public user;questionsCategory: any[];
   public message;
-  
+
   constructor(
     public loginsService: LoginsService,
     public dialogRef: MatDialogRef<DialogResetPass>,
@@ -146,11 +154,11 @@ export class DialogResetPass implements OnInit{
 
     var payLoad: any={
         email: userValue.email
-   
+
     };
 
     this.loginsService.resetPass(payLoad)
-    .subscribe(data => {      
+    .subscribe(data => {
         this.message=data;
     }, error => {
       this.openSnackBar("Não foi posivel actualizar a senha contacte o Administrador!", "OK");
@@ -164,16 +172,16 @@ export class DialogResetPass implements OnInit{
           this.openSnackBar("Senha actualizada com sucesso verifique o seu E-mail.", "OK");
         this.dialogRef.close();
         }
-        
+
       }
     );
-      
+
 
   }
 
   onNoClick(): void {
     this.dialogRef.close();
-    
+
   }
 
 

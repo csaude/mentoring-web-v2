@@ -1,6 +1,6 @@
 {
   "/mentoring-integ/*": {
-    "target": "http://localhost:8080",
+    "target": "https://mentdev.fgh.org.mz",
       "secure": false,
       "logLevel": "debug"
   },
