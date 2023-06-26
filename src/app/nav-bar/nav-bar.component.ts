@@ -13,7 +13,7 @@ import { Tutor } from '../tutors/shared/tutor';
   encapsulation: ViewEncapsulation.None
 })
 
-/** 
+/**
 * @author damasceno.lopes
 */
 export class NavBarComponent implements OnInit {
@@ -23,7 +23,7 @@ export class NavBarComponent implements OnInit {
   public partner ;
   public isHidden: String;
   public isAdmin: boolean;
-   
+
   constructor(
     public router: Router,
     public route: ActivatedRoute,
@@ -45,7 +45,7 @@ export class NavBarComponent implements OnInit {
    * Call this method on start
    */
   callMyMethod() {
-    
+
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
     this.firstName=this.user.fullName.split(' ').slice(0, -1).join(' ');
     this.lastName=this.user.fullName.split(' ').slice(-1).join(' ');
@@ -53,29 +53,12 @@ export class NavBarComponent implements OnInit {
       this.translate.use(window.localStorage.getItem('mentoring_locale'));
     }
 
-    this.tutorsService.findTutoresByUuid(this.user.uuid)
-    .subscribe(data => {
-      this.partner = data.partner;
-      this.isAdmin = data.isAdmin;
-      if(this.partner.name === "FGH"){
-        this.isHidden = "hide";
-      }else{
-        this.isHidden = "";
-      }
-    },
-    error => {
-      this.partner = '';
-    },
-    () => {
-
-    }
-    );
-
   }
-  
+
   ngOnInit() {
 
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
+    console.log(this.user);
     if (this.user) {
     var fullNameSplitted=this.user.fullName.split(' ');
     this.firstName=fullNameSplitted[0];
@@ -84,15 +67,15 @@ export class NavBarComponent implements OnInit {
     if (window.localStorage.getItem('mentoring_locale')) {
       this.translate.use(window.localStorage.getItem('mentoring_locale'));
     }
-    
+
     } else {
       this.router.navigate(['login']);
     }
-    
+
   }
 
   ngOnDestroy() {
-   
+
  }
 
   logout() {
@@ -107,7 +90,7 @@ export class NavBarComponent implements OnInit {
     this.translate.use('pt');
 
   }
-  
+
   setEn(){
     window.localStorage.removeItem('mentoring_locale')
     window.localStorage.setItem('mentoring_locale','en')

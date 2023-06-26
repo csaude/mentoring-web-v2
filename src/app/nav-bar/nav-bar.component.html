@@ -10,7 +10,7 @@
 
           <mat-menu #menu="matMenu" [overlapTrigger]="false" class="plMenuCSS">
 
-           
+
           <div style="display: flex;">
             <a routerLink="/home" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
 
@@ -19,7 +19,7 @@
 
             </a>
             <a routerLink="/reports" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 130px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-  
+
               <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-report.png" /></span>
               <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "reports" | translate }}</h3>
 
@@ -30,53 +30,50 @@
                 <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "tutoreds" | translate }}</h3>
 
             </a>
-                 
+
           </div>
 
-          <div *ngIf="isAdmin==='true'" style="display: flex; ">
-      
-              <a routerLink="/programmaticareas" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-  
+          <div style="display: flex; ">
+
+              <!--<a routerLink="/programmaticareas" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+
                   <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-programmatic.png" /></span>
                   <h3  class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "programmatic_areas" | translate }}</h3>
-  
-              </a>
 
-              <a routerLink="/mentorships" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+              </a>-->
+
+              <!--<a routerLink="/mentorships" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
 
                 <span style="margin: 5px;padding: 5px;"><img src="assets/images/menu-mentorship.png" /></span>
                 <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "mentoring_sessions" | translate }}</h3>
 
-            </a>
+            </a>-->
 
-             <!-- <span style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;"></span>  --> 
-              <a routerLink="/questions" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-  
+             <!-- <span style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;"></span>  -->
+              <!--<a routerLink="/questions" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+
                   <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-question.png" /></span>
                   <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "questions" | translate }}</h3>
-  
-              </a>
-            </div>
 
-            <div *ngIf="isAdmin==='true'" style="display: flex;">
-                <a  routerLink="/forms" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-    
+              </a>-->
+                <a *ngIf="user.isAdmin =='true'" routerLink="/forms" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+
                     <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-form.png" /></span>
                     <h3  class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px"> {{ "forms" | translate }}</h3>
-    
+
                 </a>
-             
-                <a  routerLink="/locations" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 130px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-    
+
+                <!--<a  routerLink="/locations" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 130px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+
                     <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-location.png" /></span>
                     <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "locations" | translate }}</h3>
-    
-                </a>
-                <a  routerLink="/tutors" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
-    
+
+                </a>-->
+                <a  *ngIf="user.isAdmin =='true'" routerLink="/tutors" class="mentoringMenu" mat-menu-item style="display: inline-block; width: 120px; height: 90px;align-items: center;justify-content: center; padding: 10px; margin: 5px;text-align: center;">
+
                     <span  style="margin: 5px;padding: 5px;"><img src="assets/images/menu-user.png" /></span>
                     <h3 class="mat-h4" style="word-wrap: break-word;white-space: normal; line-height: 16px">{{ "tutors" | translate }}</h3>
-    
+
                 </a>
               </div>
 
@@ -84,7 +81,7 @@
 
 <mat-icon [matMenuTriggerFor]="menu2">arrow_drop_down</mat-icon>
 <mat-menu #menu2="matMenu" [overlapTrigger]="false">
-     
+
       <a mat-menu-item style="text-decoration: none;" target="_blank" href="https://docs.google.com/document/d/1mivYpOE511T_dxPrZzGvvOLt1R_feiErxX848T29B5w/edit#">
         <mat-icon>help_outline</mat-icon>
         <span >{{ "help" | translate }}</span>
@@ -94,19 +91,19 @@
         <mat-icon>language</mat-icon>
         <span>Português</span>
       </button>
-     
+
 
       <button (click)="setEn()" mat-menu-item>
         <mat-icon>language</mat-icon>
         <span>English</span>
       </button>
-   
+
 
       <button (click)="logout()" mat-menu-item>
         <mat-icon>exit_to_app</mat-icon>
         <span>{{ "quit" | translate }}</span>
       </button>
       </mat-menu>
-      
-        
+
+
       </mat-toolbar>

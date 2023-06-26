@@ -22,7 +22,7 @@
       <mat-form-field style="width: 65%;">
         <mat-label>{{ "location" | translate }}</mat-label>
         <mat-select formControlName="location" panelClass="panel-override">
-        <mat-option *ngFor="let q of allLocations" [value]="q">{{ q.healthFacility | translate }}</mat-option>
+        <mat-option *ngFor="let q of allLocations" [value]="q">{{ q.healthFacility +'/'+ q.district.district+'/'+ q.district.province }}</mat-option>
         </mat-select>
     </mat-form-field>
 

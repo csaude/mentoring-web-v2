@@ -1,7 +1,7 @@
 
 <mat-sidenav-container autosize>
   <mat-sidenav #drawer mode="side" opened="true" [fixedInViewport]="true" [fixedTopGap]="63" >
-    
+
       <mat-toolbar color="primary">
           <mat-toolbar-row>
             <span>Menu</span>
@@ -12,18 +12,10 @@
       <a mat-list-item routerLink="/home" >
         <mat-icon>home</mat-icon>&nbsp;&nbsp;<span class="nav-caption" >{{ "home_page" | translate }}</span>
       </a>
-      
+
       <a mat-list-item (click)="printListExcel()">
         <mat-icon>file_download</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "download" | translate }}</span>
       </a>
-
-    <a mat-list-item routerLink="/forms">
-      <mat-icon>link</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "manage" | translate }} {{ "forms" | translate }}</span>
-    </a>
-
-    <a mat-list-item routerLink="/tutors">
-      <mat-icon>link</mat-icon>&nbsp;&nbsp;<span class="nav-caption">{{ "manage" | translate }} {{ "tutors" | translate }}</span>
-    </a>
 
 
   </mat-nav-list>
@@ -39,11 +31,11 @@
 
       <div style="display: flex;align-items: flex-end; margin-left: 5px;">
         <form [formGroup]="form">
-         
+
             <mat-form-field >
                 <mat-label>{{ "search_by" | translate }} {{ "code" | translate }}</mat-label>
                 <input [(ngModel)]="code" formControlName="code" matInput type="text" placeholder="{{ 'search_by' | translate }} {{ 'code' | translate }}">
-               
+
                 <button mat-button mat-icon-button matSuffix (click)="clearCodeField()" *ngIf="code">
                   <mat-icon>close</mat-icon>
               </button>
@@ -73,26 +65,26 @@
       <mat-icon>close</mat-icon>
   </button>
 </mat-form-field>
-    
-    
+
+
 
 <button style="margin-left: 30px;" (click)="search()" mat-raised-button>{{ "search" | translate }}</button>
 </form>
     </div>
 
-    
-       
+
+
         <mat-progress-bar mode="indeterminate" *ngIf="isHidden==''"></mat-progress-bar>
         <section class="mat-typography">
         <span class="info-label" *ngIf="isHidden==''">{{ "loading" | translate }}</span>
       </section>
 
-      
+
           <mat-table mat-table [dataSource]="tutoreds" class="mat-elevation-z8" matSort>
-             
+
             <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
-    
+
             <!-- Name Column -->
             <ng-container matColumnDef="code">
               <mat-header-cell *matHeaderCellDef mat-sort-header>{{ "code" | translate }}</mat-header-cell>
@@ -119,8 +111,8 @@
               <mat-cell *matCellDef="let element"> {{element.phoneNumber}} </mat-cell>
             </ng-container>
 
-      
-    
+
+
             <!-- Actions -->
             <ng-container matColumnDef="actions">
               <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -129,12 +121,12 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-               
+
                   <button mat-menu-item (click)="setQuestionEdit(element.uuid)">
                     <mat-icon>mode_edit</mat-icon>
                     <span>{{ "edit" | translate }}</span>
                   </button>
-                 
+
                 </mat-menu>
               </mat-cell>
             </ng-container>

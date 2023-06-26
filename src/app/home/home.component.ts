@@ -120,8 +120,24 @@ public total;
 
     this.tutoredService.findSubmitedSessions(user.uuid)
     .subscribe(data => {
-      this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
-      this.chartSS1 = data.submitedSessions;
+      console.log(data.submitedSessions);
+
+
+
+
+      var temchart = [];
+      if (!Array.isArray(data.submitedSessions)) {
+        temchart.push(data.submitedSessions);
+      } else {
+        temchart = data.submitedSessions;
+      }
+
+      console.log(temchart);
+
+      console.log(Array.isArray(temchart));
+
+      this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[temchart]);
+      this.chartSS1 = temchart;
       this.total=this.chartSS1.length;
       this.sessions = new MatTableDataSource(this.chartSS1);
       this.sessions.sort = this.sort;
@@ -151,7 +167,16 @@ public total;
 
     this.tutoredService.findSubmitedSessionsLast12Months(user.uuid)
     .subscribe(data => {
-      this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[data.performedSession]);
+      console.log(data);
+
+      var temchart = [];
+      if (!Array.isArray(data.performedSession)) {
+        temchart.push(data.performedSession);
+      } else {
+        temchart = data.performedSession;
+      }
+
+      this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[temchart]);
 
       var label: string[] = [];
       var value: number[] = [];
