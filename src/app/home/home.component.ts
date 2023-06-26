@@ -120,26 +120,35 @@ public total;
 
     this.tutoredService.findSubmitedSessions(user.uuid)
     .subscribe(data => {
-      if (data !== null) {
-        this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[data.submitedSessions]);
-        this.chartSS1 = data.submitedSessions;
-        this.total=this.chartSS1.length;
-        this.sessions = new MatTableDataSource(this.chartSS1);
-        this.sessions.sort = this.sort;
-        this.sessions.paginator = this.paginator;
+      console.log(data.submitedSessions);
+
+
+
+
+      var temchart = [];
+      if (!Array.isArray(data.submitedSessions)) {
+        temchart.push(data.submitedSessions);
+      } else {
+        temchart = data.submitedSessions;
       }
 
+      console.log(temchart);
+
+      console.log(Array.isArray(temchart));
+
+      this.chartSS =  alasql("Select district, SUM(totalSubmited::NUMBER) AS totalSubmited FROM ?performedSession GROUP BY district order by district ASC",[temchart]);
+      this.chartSS1 = temchart;
+      this.total=this.chartSS1.length;
+      this.sessions = new MatTableDataSource(this.chartSS1);
+      this.sessions.sort = this.sort;
+      this.sessions.paginator = this.paginator;
 
     },error=>{},
   ()=>{
 
-    console.log(this.chartSS);
+    this.chart2=true;
 
-    if (this.chartSS === undefined || this.chartSS === null) {
-      this.chart2=false;
-    } else {
-      this.chart2=true;
-      var label: string[] = [];
+    var label: string[] = [];
     var value: number[] = [];
 
       for (let l of this.chartSS) {
@@ -153,42 +162,42 @@ public total;
         { data: value, label: "Sessões" }];
 
         this.chart1=true;
-    }
     });
 
 
     this.tutoredService.findSubmitedSessionsLast12Months(user.uuid)
     .subscribe(data => {
-      console.log(data)
-      if (data !== null) {
-        this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[data.performedSession]);
+      console.log(data);
 
-        var label: string[] = [];
-        var value: number[] = [];
+      var temchart = [];
+      if (!Array.isArray(data.performedSession)) {
+        temchart.push(data.performedSession);
+      } else {
+        temchart = data.performedSession;
+      }
 
-        for (let l of this.chartSS12) {
-          label.push(l.district);
-          value.push(+l.totalPerformed);
+      this.chartSS12 = alasql("Select * FROM ?performedSession order by healthFacility ASC",[temchart]);
 
-        }
-        this.lineChartLabels = label;
-        this.lineChartData = [
-          { data: value, label: "Sessões submetidas" }];
+      var label: string[] = [];
+      var value: number[] = [];
+
+      for (let l of this.chartSS12) {
+        label.push(l.district);
+        value.push(+l.totalPerformed);
 
       }
+      this.lineChartLabels = label;
+      this.lineChartData = [
+        { data: value, label: "Sessões submetidas" }];
 
 
 
     },error=>{},
   ()=>{
 
-    console.log(this.lineChartData);
 
-    if (this.lineChartData.length <= 0) {
-      this.chart3=false;
-    } else {
-      this.chart3=true;
-    }
+
+    this.chart3=true;
   });
 
   }
