@@ -66,6 +66,10 @@ export class TutorsService {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/healthfacilities');
   }
 
+  findAllDistrictsOfProvince(province) {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/districts?province='+province);
+  }
+
   findCareerPositions(career) {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/careers/'+career);
   }
@@ -76,6 +80,14 @@ export class TutorsService {
 
   findTutoresByUuid(uuid){
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors/'+uuid);
+  }
+
+  findAllLocationsOfProvince(province) {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/healthfacilities/province/'+province);
+  }
+
+  findAllHealthfacilitiesOfDistrict(districtId) {
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/healthfacilities/'+districtId);
   }
   
 }

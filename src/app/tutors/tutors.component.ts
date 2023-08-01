@@ -306,6 +306,8 @@ export class DialogEdit implements OnInit{
             Validators.required]],
         partner: ['', [
             Validators.required]],
+            province: [''],
+            district: [''],
         location: [''],
         phoneNumber: ['', [
             Validators.required]],
@@ -383,12 +385,10 @@ export class DialogEdit implements OnInit{
   }
 
   addSelectedLocation(data) {
-    console.log(this.selectedLocation);
     if (this.selectedLocations === undefined) {
       this.selectedLocations = [];
     }
     this.selectedLocations.push(this.selectedLocation);
-    console.log(this.selectedLocations);
   }
 
   onNoClick(data): void {
@@ -586,7 +586,7 @@ export class DialogAdd implements OnInit{
         this.isDisabled=false;
       },
       ()=>{
-       
+
         this.isAdded=true;
         this.openSnackBar("O Tutor foi cadastrado com sucesso!", "OK");
       }
@@ -772,9 +772,20 @@ export class DialogLocationEdit implements OnInit{
   public form: FormGroup;
   public isHidden: string;
   public isDisabled;isAdded: boolean;
-  public user;tutors: any[];
-  public allLocations;tutor;
+  public allLocations;districtList;user;tutors: any[];
+  public tutor;
   public i:number=0;
+  public provinceList = [{desription: 'Cabo Delgado', code:'CABO_DELEGADO'},
+                         {desription: 'Niassa', code:'NIASSA'},
+                         {desription: 'Nampula', code:'NAMPULA'},
+                         {desription: 'Zambezia', code:'ZAMBEZIA'},
+                         {desription: 'Tete', code:'TETE'},
+                         {desription: 'Sofala', code:'SOFALA'},
+                         {desription: 'Manica', code:'MANICA'},
+                         {desription: 'Inhambane', code:'INHAMBANE'},
+                         {desription: 'Gaza', code:'GAZA'},
+                         {desription: 'Maputo Provincia', code:'MAPUTO'},
+                         {desription: 'Maputo Cidade', code:'CIDADE_DE_MAPUTO'}];
 
   constructor(
     public tutorsService: TutorsService,
@@ -788,7 +799,9 @@ export class DialogLocationEdit implements OnInit{
 
       this.form = formBuilder.group({
         location: ['', [
-          Validators.required]]
+          Validators.required]],
+          province: [''],
+            district: ['']
       });
 
     }
@@ -800,17 +813,49 @@ export class DialogLocationEdit implements OnInit{
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
     this.tutors = JSON.parse(window.sessionStorage.getItem('tutors'));
 
-    this.tutorsService.findAllLocations().subscribe(data => {
-      this.allLocations=data.healthFacility;
-    },
-      error => {
-        this.allLocations = [];
-      },
-      () => { }
-    );
+    
 
   }
 
+  onProvinceSelected(selectedValue) {
+    this.isHidden="";
+    this.isDisabled=true;
+    this.tutorsService.findAllDistrictsOfProvince(selectedValue.value.code).subscribe(data => {
+      this.districtList=data.district;
+      this.isHidden="hide";
+      this.isDisabled=false;
+    },
+      error => {
+        this.districtList = [];
+        this.isHidden="hide";
+        this.isDisabled=false;
+      },
+      () => { }
+    );
+    ;
+  }
+
+  onDisrictSelected(selectedValue) {
+    this.isHidden="";
+    this.isDisabled=true;
+    this.tutorsService.findAllHealthfacilitiesOfDistrict(selectedValue.value.id).subscribe(data => {
+      if (data !== null) {
+        this.allLocations = [];
+        this.allLocations = data.healthFacility;
+      } else {
+        this.openSnackBar("Nao foram encontradas uidades sanitárias ligadas ao distrito selecionado.", "OK");
+      }
+      this.isHidden="hide";
+      this.isDisabled=false;
+    },
+      error => {
+        this.allLocations = [];
+        this.isHidden="hide";
+        this.isDisabled=false;
+      },
+      () => { }
+    );
+  }
 
   compareObjects2(o1: any, o2: any) {
     if(o1.uuid == o2.uuid && o1.id == o2.id )
@@ -825,9 +870,9 @@ export class DialogLocationEdit implements OnInit{
   onSaveClick(data): void {
     var result, userValue = this.form.value;
 
-    var locations:any[] = [];
-    locations.push(userValue.location);
-
+    
+    var locations = userValue.location;
+   
     this.isHidden="";
     this.isDisabled=true;
 
@@ -836,7 +881,6 @@ export class DialogLocationEdit implements OnInit{
       userContext: this.user,
       locations:locations
     };
-    console.log(payLoad);
 
       var message;
 
@@ -852,17 +896,15 @@ export class DialogLocationEdit implements OnInit{
         this.isHidden="hide";
         this.isAdded=true;
         if(!message.message){
-        this.openSnackBar("O Tutor foi associado com sucesso!", "OK");
-      }else{
-        this.openSnackBar("O Tutor já está associado a esta Unidade Sanitária!", "OK");
-        this.isDisabled=false;
+          this.openSnackBar("O Tutor foi associado com sucesso!", "OK");
+        }else{
+          this.openSnackBar("O Tutor já está associado a esta Unidade Sanitária!", "OK");
+          this.isDisabled=false;
+        }
       }
-      }
+      
 
       );
-
-
-
 
   }
 
