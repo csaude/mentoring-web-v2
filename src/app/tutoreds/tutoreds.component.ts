@@ -8,7 +8,6 @@ import * as alasql from 'alasql';
 import { TranslateService } from 'ng2-translate';
 
 import { DatePipe } from '@angular/common';
-import { TutorsService } from '../tutors/shared/tutor.service';
 
 @Component({
   selector: 'app-tutoreds',
@@ -16,7 +15,7 @@ import { TutorsService } from '../tutors/shared/tutor.service';
   styleUrls: ['./tutoreds.component.css']
 })
 
-/** 
+/**
 * @author Damasceno Lopes <damascenolopess@gmail.com>
 */
 export class TutoredsComponent implements OnInit {
@@ -30,15 +29,13 @@ export class TutoredsComponent implements OnInit {
   public surname: string;
   public phone: string;
   public total: number;
-  public user;
-  public tutorId;
-  
+
   @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
   @ViewChild(MatSort,{static: false}) sort: MatSort;
 
   public pageEvent: PageEvent;
   public displayedColumns: string[] = ['code','name','surname','position','phone','actions'];
-     
+
   constructor(
     public excelService:ExcelService,
     public datepipe: DatePipe,
@@ -46,8 +43,7 @@ export class TutoredsComponent implements OnInit {
     public formBuilder: FormBuilder,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
-    public translate: TranslateService,
-    public tutorsService: TutorsService) {
+    public translate: TranslateService) {
     this.form = formBuilder.group({
       name: [],
       surname: [],
@@ -69,25 +65,25 @@ export class TutoredsComponent implements OnInit {
     this.icon='chevron_left';
   }
   ngOnInit() {
-    
+
     this.name = "";
     this.code = "";
     this.phone = "";
     this.surname = "";
-    this.getTutorId();
+
   }
 
   getPage() {
     this.tutoreds = [];
     this.tutoreds1 = [];
     this.isHidden = "";
-    this.tutoredsService.findTutoredsByTutor(this.tutorId, this.code, this.name, this.surname, this.phone)
+    this.tutoredsService.findTutoreds(this.code, this.name, this.surname, this.phone)
       .subscribe(data => {
-         
+
           if(data&&!data.tutored.length){
             this.tutoreds1.push(data.tutored);
             this.tutoreds = new MatTableDataSource(this.tutoreds1);
-            
+
           }
           else if(data&&data.tutored.length){
             this.tutoreds1=data.tutored;
@@ -95,12 +91,12 @@ export class TutoredsComponent implements OnInit {
             this.tutoreds.sort = this.sort;
             this.tutoreds.paginator = this.paginator;
           }
-          
+
           else{
             this.isHidden = "hide";
             this.tutoreds = [];
             this.tutoreds1 = [];
-          } 
+          }
       },
         error => {
           this.isHidden = "hide";
@@ -114,22 +110,6 @@ export class TutoredsComponent implements OnInit {
       );
   }
 
-  getTutorId(){
-
-    this.user = JSON.parse(window.sessionStorage.getItem('user'));
-
-    this.tutorsService.findTutoresByUuid(this.user.uuid)
-    .subscribe(data => {
-      this.tutorId = data.id;
-            },
-           error =>{
-            this.tutorId = {}
-          },
-         () => {
-
-        });
-
-  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -153,7 +133,7 @@ export class TutoredsComponent implements OnInit {
     this.phone="";
   }
 
- 
+
 
   search() {
     var userValue = this.form.value
@@ -170,13 +150,14 @@ export class TutoredsComponent implements OnInit {
     else {
       this.code = "";
     }
-    this.getPage()
+
+    this.getPage();
   }
 
   setQuestionEdit(uuid) {
     this.tutored = this.tutoreds1.find(item => item.uuid == uuid);
     this.openDialogEdit();
-    
+
   }
 
   setQuestionClone(uuid) {
@@ -184,7 +165,7 @@ export class TutoredsComponent implements OnInit {
     this.tutored.id=null;
     this.tutored.uuid=null;
     this.openDialogClone();
-    
+
   }
 
   printListExcel() {
@@ -198,7 +179,7 @@ export class TutoredsComponent implements OnInit {
       width: '1200px',
       height: '750px',
       data: this.tutored
-    });  
+    });
   }
 
   openDialogClone(): void {
@@ -210,10 +191,10 @@ export class TutoredsComponent implements OnInit {
       width: '1200px',
       height: '750px',
       data: this.tutored
-    }); 
+    });
   }
 
-  
+
 }
 
 
@@ -229,7 +210,7 @@ export class DialogEdit implements OnInit{
   public user;tutoreds: any[];
   public allcareers;careers;careerPositions;tutored;
   public i:number=0;
-  
+
   constructor(
     public tutoredsService: TutoredsService,
     public dialogRef: MatDialogRef<DialogEdit>,
@@ -275,13 +256,13 @@ export class DialogEdit implements OnInit{
       () => {
         this.careerPositions = alasql("SELECT * FROM ?allcareers WHERE careerType='"+this.tutored.career.careerType+"'", [this.allcareers]);
       }
-    ); 
-   
+    );
+
   }
 
   onChange(value) {
     this.i++;
-    if(this.i>1){ 
+    if(this.i>1){
     this.careerPositions = alasql("SELECT * FROM ?allcareers WHERE careerType='"+value.careerType+"'", [this.allcareers]);
   }
   }
@@ -300,12 +281,12 @@ export class DialogEdit implements OnInit{
 
   onNoClick(data): void {
     this.dialogRef.close();
-    
+
       if(this.isAdded==true){
         this.tutoredsService.callMethodUpdateOfComponent();
       }
       else{
-  
+
       }
 
   }
@@ -318,27 +299,27 @@ export class DialogEdit implements OnInit{
 
     }else{
     this.isDisabled=true;
-    
+
 
     var payLoad: any={
       tutored:data,
       userContext: this.user
     };
 
-    
+
       this.tutoredsService.update(payLoad).subscribe(data => {
       },error=>{
         this.isDisabled=false;
       },
       ()=>{
-        
+
         this.isAdded=true;
         this.openSnackBar("O Tutorado com o código "+data.code+" foi actualizada com sucesso!", "OK");
       }
-      
+
       );
     }
-    
+
   }
 
   openSnackBar(message: string, action: string) {
@@ -346,7 +327,7 @@ export class DialogEdit implements OnInit{
       duration: 4000,
     });
 
-    
+
   }
 
 }

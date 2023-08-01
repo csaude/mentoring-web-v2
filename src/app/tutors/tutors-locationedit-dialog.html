@@ -19,10 +19,24 @@
           </mat-select>
       </mat-form-field>
 -->
-      <mat-form-field style="width: 65%;">
+  <mat-form-field style="width: 25%;">
+    <mat-label>{{ "province" | translate }}</mat-label>
+    <mat-select (selectionChange)="onProvinceSelected($event)" formControlName="province" panelClass="panel-override">
+    <mat-option *ngFor="let q of provinceList" [value]="q">{{ q.desription }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field style="width: 25%; margin-left: 20px;">
+    <mat-label>{{ "district" | translate }}</mat-label>
+    <mat-select (selectionChange)="onDisrictSelected($event)" formControlName="district" panelClass="panel-override">
+    <mat-option *ngFor="let q of districtList" [value]="q">{{ q.district }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+      <mat-form-field style="width: 35%; margin-left: 20px;">
         <mat-label>{{ "location" | translate }}</mat-label>
-        <mat-select formControlName="location" panelClass="panel-override">
-        <mat-option *ngFor="let q of allLocations" [value]="q">{{ q.healthFacility +'/'+ q.district.district+'/'+ q.district.province }}</mat-option>
+        <mat-select formControlName="location" panelClass="panel-override" multiple>
+        <mat-option *ngFor="let q of allLocations" [value]="q">{{ q.healthFacility }}</mat-option>
         </mat-select>
     </mat-form-field>
 
