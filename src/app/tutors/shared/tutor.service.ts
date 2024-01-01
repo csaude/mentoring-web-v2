@@ -78,4 +78,13 @@ export class TutorsService {
     return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors/'+uuid);
   }
   
+  fetchTutorsForUserPartner(code, name, surname, phoneNumber, userUuid){
+    const params = new HttpParams()
+    .set('code', code)
+    .set('name', name)
+    .set('surname', surname)
+    .set('phoneNumber', phoneNumber)
+    .set('userUuid', userUuid);
+    return this.httpClient.get<any>(myGlobals.API+'/mentoring-integ/services/tutors/v2/tutor-partner', {params});
+  }
 }

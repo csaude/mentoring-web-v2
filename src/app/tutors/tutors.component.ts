@@ -77,17 +77,6 @@ export class TutorsComponent implements OnInit {
     this.phone = "";
     this.surname = "";
     this.user = JSON.parse(window.sessionStorage.getItem('user'));
-
-    this.tutorsService.findTutoresByUuid(this.user.uuid)
-    .subscribe(data => {
-      this.partner = data.partner;
-            },
-           error =>{
-    this.partner = {}
-          },
-         () => {
-
-        });
   }
 
   getPage() {
@@ -96,7 +85,7 @@ export class TutorsComponent implements OnInit {
     this.tutors1 = [];
     this.isHidden = "";
 
-    this.tutorsService.findTutorsForPartner(this.code, this.name, this.surname, this.phone, this.partner.uuid)
+    this.tutorsService.fetchTutorsForUserPartner(this.code, this.name, this.surname, this.phone, this.user.uuid)
       .subscribe(data => {
 
           if(data&&!data.tutor.length){
@@ -127,8 +116,6 @@ export class TutorsComponent implements OnInit {
           this.isHidden = "hide";
         }
       );
-
-
   }
 
 
